@@ -1,0 +1,1868 @@
+<template>
+  <a-config-provider :locale="zhCN">
+    <a-layout class="layout">
+      <a-layout-header class="header">
+        <div class="brand">
+          <span class="title">AI AI 投标报价系统</span>
+          <a-tag color="blue">分阶段处理</a-tag>
+        </div>
+        <div class="header-right">
+          <a-tag :color="llmOk ? 'success' : 'error'">
+            LLM {{ llmOk ? '已配置' : '未配置' }}
+          </a-tag>
+          <a-button type="primary" @click="openCreate">新建项目</a-button>
+        </div>
+      </a-layout-header>
+
+      <a-layout>
+        <a-layout-sider width="260" theme="light" class="sider">
+          <div class="sider-title">项目列表</div>
+          <a-spin :spinning="loadingList">
+            <a-menu
+              v-if="projects.length"
+              mode="inline"
+              :selectedKeys="selectedId ? [String(selectedId)] : []"
+              @click="onSelectProject"
+            >
+              <a-menu-item v-for="p in projects" :key="String(p.id)">
+                <div class="menu-item">
+                  <div class="name">{{ p.name }}</div>
+                  <a-tag>{{ stageShort(p.status) }}</a-tag>
+                </div>
+              </a-menu-item>
+            </a-menu>
+            <a-empty v-else description="暂无项目" />
+          </a-spin>
+        </a-layout-sider>
+
+        <a-layout-content class="content">
+          <a-card v-if="!selectedId">
+            <a-empty description="请选择或新建项目，按阶段完成：上传 → 公告 → 须知 → 报价 …">
+              <a-button type="primary" @click="openCreate">新建项目</a-button>
+            </a-empty>
+          </a-card>
+
+          <template v-else>
+            <a-card size="small" class="project-bar">
+              <div class="project-bar-inner">
+                <div>
+                  <div class="project-name">{{ detail?.project?.name }}</div>
+                  <div class="project-meta">
+                    <span>{{ detail?.project?.zip_name || '未上传 ZIP' }}</span>
+                    <a-divider type="vertical" />
+                    <span>{{ detail?.documents?.length || 0 }} 个文件</span>
+                  </div>
+                </div>
+                <a-space>
+                  <a-button
+                    type="primary"
+                    :disabled="!hasZip"
+                    :loading="exporting"
+                    @click="exportExcel"
+                  >
+                    导出EXCEL
+                  </a-button>
+                  <a-button danger @click="removeProject">删除项目</a-button>
+                </a-space>
+              </div>
+            </a-card>
+
+            <a-card class="steps-card">
+              <a-steps
+                :current="currentStep"
+                type="navigation"
+                size="small"
+                :items="stepItems"
+                @change="onStepChange"
+              />
+            </a-card>
+
+            <!-- 阶段 0：上传 -->
+            <a-card v-if="currentStep === 0" title="阶段一 · 上传招标文件包">
+              <a-alert
+                type="info"
+                show-icon
+                style="margin-bottom: 16px"
+                message="上传完整 ZIP 后进入下一阶段。本阶段不做文件预览，系统后台自动识别各部分目录。"
+              />
+              <a-upload-dragger
+                :before-upload="beforeUpload"
+                :show-upload-list="false"
+                accept=".zip"
+                :disabled="uploading"
+              >
+                <p class="ant-upload-drag-icon">📦</p>
+                <p class="ant-upload-text">点击或拖拽上传招标文件 ZIP</p>
+                <p class="ant-upload-hint">
+                  典型结构含：第一部分招标公告、第二部分投标须知、第三部分投标报价…
+                </p>
+              </a-upload-dragger>
+              <a-progress
+                v-if="uploadPercent > 0 && uploadPercent < 100"
+                :percent="uploadPercent"
+                style="margin-top: 12px"
+              />
+              <a-result
+                v-if="hasZip"
+                status="success"
+                title="ZIP 已入库"
+                :sub-title="`${detail?.project?.zip_name}（${detail?.documents?.length || 0} 个文件）`"
+              >
+                <template #extra>
+                  <a-space>
+                    <a-upload :before-upload="beforeUpload" :show-upload-list="false" accept=".zip">
+                      <a-button :loading="uploading">重新上传</a-button>
+                    </a-upload>
+                    <a-button type="primary" @click="goStep(1)">进入「招标公告」分析</a-button>
+                  </a-space>
+                </template>
+              </a-result>
+            </a-card>
+
+            <!-- 阶段 1：招标公告 -->
+            <a-card v-else-if="currentStep === 1" title="阶段二 · 招标公告分析">
+              <template #extra>
+                <a-space>
+                  <a-button @click="goStep(0)">上一步</a-button>
+                  <a-button
+                    type="primary"
+                    :disabled="!hasZip"
+                    :loading="analyzing"
+                    @click="runAnalyze"
+                  >
+                    {{ noticeDone ? '重新分析公告' : '开始分析招标公告' }}
+                  </a-button>
+                  <a-button type="primary" ghost :disabled="!noticeDone" @click="goStep(2)">
+                    进入下一阶段
+                  </a-button>
+                </a-space>
+              </template>
+
+              <a-alert
+                v-if="!hasZip"
+                type="warning"
+                show-icon
+                message="请先完成「上传招标文件包」"
+                style="margin-bottom: 16px"
+              />
+
+              <template v-else>
+                <a-descriptions bordered size="small" :column="2" style="margin-bottom: 16px">
+                  <a-descriptions-item label="定位公告">
+                    {{ detail?.notice_doc?.rel_path || '上传后自动定位 1.1 招标通告' }}
+                  </a-descriptions-item>
+                  <a-descriptions-item label="本阶段状态">
+                    <a-tag :color="noticeDone ? 'success' : analysis?.status === 'failed' ? 'error' : 'processing'">
+                      {{ noticeDone ? '已完成' : analysis?.status === 'failed' ? '失败' : '待分析' }}
+                    </a-tag>
+                  </a-descriptions-item>
+                </a-descriptions>
+
+                <template v-if="analysis?.status === 'done'">
+                  <a-alert type="info" show-icon style="margin-bottom: 12px" :message="sourceSummary" />
+                  <a-table
+                    size="small"
+                    :pagination="false"
+                    :columns="fieldColumns"
+                    :data-source="fields"
+                    row-key="key"
+                    :scroll="{ x: true }"
+                  />
+                  <a-divider orientation="left">原子要求</a-divider>
+                  <a-list size="small" bordered :data-source="atomic">
+                    <template #renderItem="{ item }">
+                      <a-list-item>
+                        <a-list-item-meta
+                          :title="item.text"
+                          :description="`参数: ${item.param || '—'}｜证据: ${item.evidence || '—'}`"
+                        />
+                      </a-list-item>
+                    </template>
+                  </a-list>
+                  <a-divider orientation="left">待确认问题</a-divider>
+                  <a-list size="small" bordered :data-source="questions">
+                    <template #renderItem="{ item }">
+                      <a-list-item>{{ item }}</a-list-item>
+                    </template>
+                  </a-list>
+                </template>
+                <a-alert
+                  v-else-if="analysis?.status === 'failed'"
+                  type="error"
+                  show-icon
+                  :message="analysis.error || '分析失败'"
+                />
+                <a-empty v-else description="点击右上角「开始分析招标公告」，本阶段仅处理第一部分公告" />
+              </template>
+            </a-card>
+
+            <!-- 阶段 2：投标须知 -->
+            <a-card v-else-if="currentStep === 2" title="阶段三 · 投标须知（附件动态清单）">
+              <template #extra>
+                <a-space>
+                  <a-button @click="goStep(1)">上一步</a-button>
+                  <a-button :loading="instLoading" @click="loadInstructions(true)">重新扫描附件</a-button>
+                  <a-button type="primary" ghost :disabled="!instCompleted" @click="goStep(3)">
+                    进入下一阶段
+                  </a-button>
+                </a-space>
+              </template>
+
+              <a-alert
+                v-if="!noticeDone"
+                type="warning"
+                show-icon
+                message="请先完成「招标公告」分析，以便预填项目/招标方等基础数据"
+                style="margin-bottom: 16px"
+              />
+
+              <a-spin :spinning="instLoading">
+                <a-steps
+                  size="small"
+                  :current="instStep"
+                  style="margin-bottom: 16px"
+                  :items="(instState?.workflow_steps || []).map((s) => ({ title: s.title, description: s.desc }))"
+                  @change="onInstStepChange"
+                />
+
+                <a-row :gutter="16">
+                  <a-col :span="9">
+                    <a-card size="small" title="附件清单（动态识别）">
+                      <template #extra>
+                        <a-tag>{{ instAttachments.length }} 项</a-tag>
+                      </template>
+                      <div v-if="instState?.instruction_doc" class="inst-doc">
+                        须知正文：{{ instState.instruction_doc.filename }}
+                      </div>
+                      <a-alert
+                        v-if="instBrief?.summary"
+                        type="success"
+                        show-icon
+                        style="margin-bottom: 8px"
+                        :message="instBrief.summary"
+                      />
+                      <a-list size="small" :data-source="instAttachments" bordered>
+                        <template #renderItem="{ item }">
+                          <a-list-item
+                            class="inst-att-item"
+                            :class="{
+                              active: selectedAttCode === item.code,
+                              locked: isAttLocked(item),
+                              done: ['done', 'not_required', 'skipped'].includes(item.status),
+                            }"
+                            @click="selectAttachment(item)"
+                          >
+                            <a-list-item-meta>
+                              <template #title>
+                                <a-space>
+                                  <a-checkbox
+                                    :checked="item.included !== false"
+                                    @click.stop
+                                    @change="(e) => toggleAttIncluded(item, e.target.checked)"
+                                  />
+                                  <span>{{ item.code }} {{ item.title }}</span>
+                                </a-space>
+                              </template>
+                              <template #description>
+                                <div>{{ item.filename }}</div>
+                                <a-tag :color="statusColor(item.status)" style="margin-top: 4px">
+                                  {{ item.status_label || item.status }}
+                                </a-tag>
+                                <a-tag style="margin-top: 4px">{{ item.category_label }}</a-tag>
+                              </template>
+                            </a-list-item-meta>
+                          </a-list-item>
+                        </template>
+                      </a-list>
+                      <a-divider style="margin: 12px 0" />
+                      <div class="muted">联动关系</div>
+                      <ul class="link-list">
+                        <li v-for="(l, i) in instState?.links || []" :key="i">{{ l.label }}</li>
+                      </ul>
+                    </a-card>
+                  </a-col>
+
+                  <a-col :span="15">
+                    <!-- ①识别 -->
+                    <a-card v-if="instStep === 0" size="small" title="① 识别清单 / 分析投标须知正文">
+                      <a-alert
+                        type="info"
+                        show-icon
+                        style="margin-bottom: 12px"
+                        message="先用大模型解读《2.1 投标须知》，再核对附件清单。附件数量与文件名因招标包而异。"
+                      />
+                      <a-descriptions bordered size="small" :column="1" style="margin-bottom: 12px">
+                        <a-descriptions-item label="须知正文">
+                          {{ instState?.instruction_doc?.rel_path || '未定位到 2.1 投标须知' }}
+                        </a-descriptions-item>
+                        <a-descriptions-item label="已识别附件">
+                          {{ instAttachments.length }} 个
+                        </a-descriptions-item>
+                      </a-descriptions>
+
+                      <a-space style="margin-bottom: 12px">
+                        <a-button
+                          type="primary"
+                          :loading="instBodyAnalyzing"
+                          :disabled="!instState?.instruction_doc"
+                          @click="analyzeInstructionBody"
+                        >
+                          {{ instBrief ? '重新分析投标须知' : '大模型分析投标须知' }}
+                        </a-button>
+                      </a-space>
+
+                      <template v-if="instBrief">
+                        <a-alert
+                          type="success"
+                          show-icon
+                          style="margin-bottom: 12px"
+                          :message="instBrief.summary || '已完成须知正文分析'"
+                          :description="instBriefSource"
+                        />
+                        <a-divider orientation="left">关键字段</a-divider>
+                        <a-table
+                          size="small"
+                          :pagination="false"
+                          row-key="key"
+                          :columns="instBriefFieldColumns"
+                          :data-source="instBrief.key_fields || []"
+                          :scroll="{ x: true }"
+                        />
+                        <a-divider orientation="left">分节要点</a-divider>
+                        <a-collapse>
+                          <a-collapse-panel
+                            v-for="(sec, i) in instBrief.sections || []"
+                            :key="i"
+                            :header="sec.title"
+                          >
+                            <ul class="brief-points">
+                              <li v-for="(p, j) in sec.points || []" :key="j">{{ p }}</li>
+                            </ul>
+                          </a-collapse-panel>
+                        </a-collapse>
+                        <a-row :gutter="12" style="margin-top: 12px">
+                          <a-col :span="12">
+                            <a-card size="small" title="硬性规则">
+                              <ul class="brief-points">
+                                <li v-for="(r, i) in instBrief.mandatory_rules || []" :key="i">{{ r }}</li>
+                              </ul>
+                              <a-empty v-if="!(instBrief.mandatory_rules || []).length" description="无" />
+                            </a-card>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-card size="small" title="附件/提交提示">
+                              <ul class="brief-points">
+                                <li v-for="(r, i) in instBrief.attachment_hints || []" :key="i">{{ r }}</li>
+                              </ul>
+                              <a-empty v-if="!(instBrief.attachment_hints || []).length" description="无" />
+                            </a-card>
+                          </a-col>
+                        </a-row>
+                        <a-card
+                          v-if="(instBrief.risks_open_questions || []).length"
+                          size="small"
+                          title="风险 / 待确认"
+                          style="margin-top: 12px"
+                        >
+                          <ul class="brief-points">
+                            <li v-for="(r, i) in instBrief.risks_open_questions || []" :key="i">{{ r }}</li>
+                          </ul>
+                        </a-card>
+                      </template>
+                      <a-empty v-else description="点击上方按钮，分析《投标须知》重要内容" />
+
+                      <a-space style="margin-top: 16px">
+                        <a-button type="primary" :disabled="!instBrief" @click="saveInstStep(1)">
+                          {{ instBrief ? '确认并进入条件确认' : '请先分析投标须知' }}
+                        </a-button>
+                      </a-space>
+                    </a-card>
+
+                    <!-- ②条件 -->
+                    <a-card v-else-if="instStep === 1" size="small" title="② 条件确认（附件01 / 08）">
+                      <a-form layout="vertical">
+                        <a-form-item label="附件01 授权委托书：是否已在招标方办理授权备案？">
+                          <a-radio-group v-model:value="condForm.auth_filing" @change="persistConditions">
+                            <a-radio value="filed">已备案（无需提交，保留证明）</a-radio>
+                            <a-radio value="not_filed">未备案（自动生成）</a-radio>
+                            <a-radio value="unknown">无法确认（待核实，不得省略）</a-radio>
+                          </a-radio-group>
+                        </a-form-item>
+                        <a-form-item v-if="condForm.auth_filing === 'filed'" label="备案说明 / 证明备注">
+                          <a-input
+                            v-model:value="condForm.auth_proof_note"
+                            placeholder="例如：已于××日完成授权备案"
+                            @blur="persistConditions"
+                          />
+                        </a-form-item>
+
+                        <a-divider />
+                        <a-form-item label="附件08 劳务协议：是否适用于本项目实际用工场景？">
+                          <a-radio-group
+                            :value="condForm.labor_applicable === null ? undefined : condForm.labor_applicable"
+                            @change="(e) => { condForm.labor_applicable = e.target.value; persistConditions() }"
+                          >
+                            <a-radio :value="true">适用，进入法务审查流程</a-radio>
+                            <a-radio :value="false">不适用，需向招标方澄清</a-radio>
+                          </a-radio-group>
+                        </a-form-item>
+                        <template v-if="condForm.labor_applicable === true">
+                          <a-form-item label="四项确认（法务前置）">
+                            <a-space direction="vertical">
+                              <a-checkbox
+                                :checked="condForm.labor_checks.use_employer_quota === true"
+                                @change="(e) => setLaborCheck('use_employer_quota', e.target.checked)"
+                              >
+                                本项目确实使用甲方用工指标
+                              </a-checkbox>
+                              <a-checkbox
+                                :checked="condForm.labor_checks.non_employer_work === true"
+                                @change="(e) => setLaborCheck('non_employer_work', e.target.checked)"
+                              >
+                                存在人员安排至非甲方单位工作的情形
+                              </a-checkbox>
+                              <a-checkbox
+                                :checked="condForm.labor_checks.accept_advance_deduct === true"
+                                @change="(e) => setLaborCheck('accept_advance_deduct', e.target.checked)"
+                              >
+                                接受代付及直接扣款机制
+                              </a-checkbox>
+                              <a-checkbox
+                                :checked="condForm.labor_checks.need_liability_boundary === true"
+                                @change="(e) => setLaborCheck('need_liability_boundary', e.target.checked)"
+                              >
+                                赔偿责任需要设置边界
+                              </a-checkbox>
+                            </a-space>
+                          </a-form-item>
+                        </template>
+
+                        <a-form-item label="附件02 现场考察确认（生成承诺函前必选）">
+                          <a-radio-group v-model:value="condForm.site_visit_confirm" @change="persistConditions">
+                            <a-radio value="done">已完成现场考察</a-radio>
+                            <a-radio value="desk_assessed">未考察，已通过资料完成风险评估</a-radio>
+                            <a-radio value="need_clarify">需修改/澄清承诺表述（转商务法务）</a-radio>
+                          </a-radio-group>
+                        </a-form-item>
+                      </a-form>
+                      <a-space>
+                        <a-button @click="saveInstStep(0)">上一步</a-button>
+                        <a-button type="primary" @click="saveInstStep(2)">保存并进入基础数据</a-button>
+                      </a-space>
+                    </a-card>
+
+                    <!-- ③基础数据 -->
+                    <a-card v-else-if="instStep === 2" size="small" title="③ 统一基础数据">
+                      <a-alert
+                        v-if="baseForm.from_notice"
+                        type="success"
+                        show-icon
+                        style="margin-bottom: 12px"
+                        message="已从招标公告分析结果预填部分字段，请核对并补全投标人/法人等信息"
+                      />
+                      <a-form layout="vertical">
+                        <a-row :gutter="12">
+                          <a-col :span="12">
+                            <a-form-item label="项目名称">
+                              <a-input v-model:value="baseForm.project_name" />
+                            </a-form-item>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-form-item label="招标方">
+                              <a-input v-model:value="baseForm.employer" />
+                            </a-form-item>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-form-item label="投标人名称" required>
+                              <a-input v-model:value="baseForm.bidder_name" placeholder="必填" />
+                            </a-form-item>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-form-item label="法定代表人">
+                              <a-input v-model:value="baseForm.legal_representative" />
+                            </a-form-item>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-form-item label="授权代理人">
+                              <a-input v-model:value="baseForm.agent_name" />
+                            </a-form-item>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-form-item label="截标时间">
+                              <a-input v-model:value="baseForm.bid_deadline" />
+                            </a-form-item>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-form-item label="币种">
+                              <a-input v-model:value="baseForm.currency" />
+                            </a-form-item>
+                          </a-col>
+                          <a-col :span="12">
+                            <a-form-item label="锁定报价总额（驱动附件02）">
+                              <a-input
+                                v-model:value="baseForm.locked_quote"
+                                placeholder="报价锁定后填入，勿手工重复造数"
+                              />
+                            </a-form-item>
+                          </a-col>
+                        </a-row>
+                      </a-form>
+                      <a-space>
+                        <a-button @click="saveInstStep(1)">上一步</a-button>
+                        <a-button type="primary" @click="persistBaseData().then(() => saveInstStep(3))">
+                          保存并进入分级编制
+                        </a-button>
+                      </a-space>
+                    </a-card>
+
+                    <!-- ④编制：逐个附件工作台 -->
+                    <a-card v-else-if="instStep === 3" size="small" title="④ 逐个附件编制（完成一个才能做下一个）">
+                      <a-alert
+                        v-if="wbLockReason"
+                        type="warning"
+                        show-icon
+                        style="margin-bottom: 12px"
+                        :message="wbLockReason"
+                      />
+                      <a-alert
+                        type="info"
+                        show-icon
+                        style="margin-bottom: 12px"
+                        :message="`当前办理：${selectedAtt?.code || '—'} ${selectedAtt?.title || ''}｜状态 ${selectedAtt?.status_label || ''}`"
+                      />
+
+                      <template v-if="selectedAtt">
+                        <a-descriptions bordered size="small" :column="2" style="margin-bottom: 12px">
+                          <a-descriptions-item label="模板文件" :span="2">
+                            {{ selectedAtt.rel_path }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="类型">
+                            {{ selectedAtt.category_label }}
+                          </a-descriptions-item>
+                          <a-descriptions-item label="依赖">
+                            {{ (selectedAtt.depends_on || []).join('、') || '无' }}
+                          </a-descriptions-item>
+                        </a-descriptions>
+
+                        <!-- 附件01：授权委托书 -->
+                        <template v-if="selectedAtt.kind === 'power_of_attorney'">
+                          <a-divider orientation="left">条件：是否已办理授权备案</a-divider>
+                          <a-radio-group
+                            v-model:value="condForm.auth_filing"
+                            :disabled="!!wbLockReason"
+                            style="margin-bottom: 12px"
+                            @change="onAuthFilingChange"
+                          >
+                            <a-radio value="filed">已备案 → 无需提交（保留证明说明）</a-radio>
+                            <a-radio value="not_filed">未备案 → 预填模板并导出 Word</a-radio>
+                            <a-radio value="unknown">无法确认 → 不得省略</a-radio>
+                          </a-radio-group>
+                          <a-input
+                            v-if="condForm.auth_filing === 'filed'"
+                            v-model:value="condForm.auth_proof_note"
+                            placeholder="备案证明备注"
+                            style="margin-bottom: 12px"
+                            @blur="persistConditions"
+                          />
+
+                          <template v-if="condForm.auth_filing === 'not_filed'">
+                            <a-divider orientation="left">主数据（企业 / 法人 / 代理人）</a-divider>
+                            <a-row :gutter="8" style="margin-bottom: 8px">
+                              <a-col :span="8">
+                                <a-input v-model:value="masterForm.enterprise.bidder_name" placeholder="投标人名称" addon-before="企业" />
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input v-model:value="masterForm.legal_rep.legal_rep_name" placeholder="法定代表人" addon-before="法人" />
+                              </a-col>
+                              <a-col :span="8">
+                                <a-input v-model:value="masterForm.agent.agent_name" placeholder="代理人姓名" addon-before="代理人" />
+                              </a-col>
+                              <a-col :span="8" style="margin-top: 8px">
+                                <a-input v-model:value="masterForm.agent.agent_id_no" placeholder="代理人身份证号" />
+                              </a-col>
+                              <a-col :span="8" style="margin-top: 8px">
+                                <a-input v-model:value="masterForm.project.employer_name" placeholder="招标人" />
+                              </a-col>
+                              <a-col :span="8" style="margin-top: 8px">
+                                <a-input v-model:value="masterForm.project.project_name" placeholder="项目名称" />
+                              </a-col>
+                            </a-row>
+                            <a-space style="margin-bottom: 12px">
+                              <a-button size="small" :loading="wbSaving" @click="saveMasterAndPrefill">保存主数据并预填表格</a-button>
+                              <a-button
+                                type="primary"
+                                size="small"
+                                :loading="wbAnalyzing"
+                                :disabled="!!wbLockReason"
+                                @click="analyzeCurrentFields"
+                              >
+                                大模型分析需填字段
+                              </a-button>
+                            </a-space>
+                            <a-alert
+                              v-if="fieldAnalyzeHint"
+                              type="warning"
+                              show-icon
+                              style="margin-bottom: 8px"
+                              :message="fieldAnalyzeHint"
+                            />
+                            <a-table
+                              size="small"
+                              :pagination="false"
+                              row-key="key"
+                              :columns="fieldColumnsPoa"
+                              :data-source="editableFields"
+                              :scroll="{ x: true }"
+                            >
+                              <template #bodyCell="{ column, record }">
+                                <template v-if="column.dataIndex === 'required'">
+                                  <a-tag :color="record.required ? 'red' : 'default'">
+                                    {{ record.required ? '必填' : '选填' }}
+                                  </a-tag>
+                                </template>
+                                <template v-else-if="column.dataIndex === 'source'">
+                                  {{ sourceLabel(record.source) }}
+                                </template>
+                                <template v-else-if="column.dataIndex === 'value'">
+                                  <a-input
+                                    v-model:value="record.value"
+                                    :placeholder="record.hint || '请填写'"
+                                    :disabled="!!wbLockReason"
+                                    @blur="saveFieldsDebounced"
+                                  />
+                                </template>
+                              </template>
+                            </a-table>
+                            <a-collapse style="margin-top: 12px" ghost>
+                              <a-collapse-panel key="sign" header="签章 / 核对提醒">
+                                <ul>
+                                  <li v-for="(t, i) in signReminders" :key="i">{{ t }}</li>
+                                </ul>
+                              </a-collapse-panel>
+                            </a-collapse>
+                          </template>
+                        </template>
+
+                        <!-- 附件02：投标承诺函 -->
+                        <template v-else-if="selectedAtt.kind === 'bid_commitment'">
+                          <a-alert
+                            type="info"
+                            show-icon
+                            style="margin-bottom: 12px"
+                            message="基于原《投标承诺函》模板回填，不另写正文。自动带入项目/公司/签署人/报价；须校验大小写金额，并确认现场考察事实。"
+                          />
+                          <a-form-item label="现场考察确认（生成/完成前必选）">
+                            <a-radio-group
+                              v-model:value="condForm.site_visit_confirm"
+                              :disabled="!!wbLockReason"
+                              @change="persistConditions"
+                            >
+                              <a-radio value="done">已完成现场考察</a-radio>
+                              <a-radio value="desk_assessed">未考察，已通过资料完成风险评估</a-radio>
+                              <a-radio value="need_clarify">需修改/澄清承诺表述</a-radio>
+                            </a-radio-group>
+                          </a-form-item>
+                          <a-row :gutter="8" style="margin-bottom: 8px">
+                            <a-col :span="8">
+                              <a-input v-model:value="masterForm.enterprise.bidder_name" placeholder="公司名称" addon-before="企业" />
+                            </a-col>
+                            <a-col :span="8">
+                              <a-input v-model:value="masterForm.legal_rep.legal_rep_name" placeholder="签署人" addon-before="签署人" />
+                            </a-col>
+                            <a-col :span="8">
+                              <a-input v-model:value="baseForm.locked_quote" placeholder="锁定报价总额" addon-before="报价" />
+                            </a-col>
+                            <a-col :span="12" style="margin-top: 8px">
+                              <a-input v-model:value="masterForm.project.project_name" placeholder="项目名称" />
+                            </a-col>
+                            <a-col :span="12" style="margin-top: 8px">
+                              <a-input v-model:value="masterForm.project.employer_name" placeholder="招标人" />
+                            </a-col>
+                          </a-row>
+                          <a-space style="margin-bottom: 12px">
+                            <a-button size="small" :loading="wbSaving" @click="saveMasterQuoteAndPrefill">保存并预填</a-button>
+                            <a-button
+                              type="primary"
+                              size="small"
+                              :loading="wbAnalyzing"
+                              :disabled="!!wbLockReason"
+                              @click="analyzeCurrentFields"
+                            >
+                              大模型分析需填字段
+                            </a-button>
+                          </a-space>
+                          <a-alert
+                            v-if="fieldAnalyzeHint"
+                            type="warning"
+                            show-icon
+                            style="margin-bottom: 8px"
+                            :message="fieldAnalyzeHint"
+                          />
+                          <a-table
+                            size="small"
+                            :pagination="false"
+                            row-key="key"
+                            :columns="fieldColumnsPoa"
+                            :data-source="editableFields"
+                            :scroll="{ x: true }"
+                          >
+                            <template #bodyCell="{ column, record }">
+                              <template v-if="column.dataIndex === 'required'">
+                                <a-tag :color="record.required ? 'red' : 'default'">
+                                  {{ record.required ? '必填' : '选填' }}
+                                </a-tag>
+                              </template>
+                              <template v-else-if="column.dataIndex === 'source'">
+                                {{ sourceLabel(record.source) }}
+                              </template>
+                              <template v-else-if="column.dataIndex === 'value'">
+                                <a-input
+                                  v-model:value="record.value"
+                                  :placeholder="record.hint || '请填写'"
+                                  :disabled="!!wbLockReason"
+                                  @blur="saveFieldsDebounced"
+                                />
+                              </template>
+                            </template>
+                          </a-table>
+                          <a-collapse style="margin-top: 12px" ghost>
+                            <a-collapse-panel key="tpl" header="原模板正文预览（导出将在此基础上填入）">
+                              <pre class="tpl-preview">{{ selectedAtt.form_data?.template_preview || '请先分析字段' }}</pre>
+                            </a-collapse-panel>
+                            <a-collapse-panel key="sign" header="签章 / 核对提醒">
+                              <ul>
+                                <li v-for="(t, i) in signReminders" :key="i">{{ t }}</li>
+                              </ul>
+                            </a-collapse-panel>
+                          </a-collapse>
+                        </template>
+
+                        <!-- 其它附件占位：后续逐个实现 -->
+                        <template v-else>
+                          <a-result
+                            status="info"
+                            title="本附件工作台稍后实现"
+                            sub-title="请先按顺序完成当前附件。已开放：附件01授权委托书、附件02投标承诺函。"
+                          />
+                        </template>
+
+                        <a-space style="margin-top: 16px">
+                          <a-button @click="saveInstStep(2)">上一步</a-button>
+                          <a-button
+                            v-if="canExportCurrentDocx"
+                            type="primary"
+                            ghost
+                            :loading="wbExporting"
+                            :disabled="!!wbLockReason || !editableFields.length"
+                            @click="exportCurrentDocx"
+                          >
+                            导出填写后的 Word（待盖章）
+                          </a-button>
+                          <a-button
+                            type="primary"
+                            :loading="wbSaving"
+                            :disabled="!!wbLockReason"
+                            @click="completeCurrentAttachment"
+                          >
+                            完成本附件，解锁下一个
+                          </a-button>
+                          <a-button
+                            :disabled="!allIncludedDone"
+                            type="primary"
+                            ghost
+                            @click="saveInstStep(4)"
+                          >
+                            全部完成后进入校验
+                          </a-button>
+                        </a-space>
+                      </template>
+                      <a-empty v-else description="暂无附件" />
+                    </a-card>
+
+                    <!-- ⑤校验 -->
+                    <a-card v-else-if="instStep === 4" size="small" title="⑤ 一致性校验">
+                      <a-space style="margin-bottom: 12px">
+                        <a-button type="primary" :loading="instSaving" @click="runInstValidate">重新校验</a-button>
+                        <a-tag :color="instValidation.passed ? 'success' : 'error'">
+                          {{ instValidation.summary || (instValidation.passed ? '全部通过' : '存在未通过项') }}
+                        </a-tag>
+                      </a-space>
+                      <a-table
+                        size="small"
+                        :pagination="false"
+                        row-key="code"
+                        :columns="validateColumns"
+                        :data-source="instValidation.items || []"
+                      >
+                        <template #bodyCell="{ column, record }">
+                          <template v-if="column.dataIndex === 'passed'">
+                            <a-tag :color="record.passed ? 'success' : 'error'">
+                              {{ record.passed ? '通过' : '未通过' }}
+                            </a-tag>
+                          </template>
+                        </template>
+                      </a-table>
+                      <a-space style="margin-top: 16px">
+                        <a-button @click="saveInstStep(3)">上一步</a-button>
+                        <a-button type="primary" :disabled="!instValidation.passed" @click="saveInstStep(5)">
+                          校验通过，进入完成
+                        </a-button>
+                      </a-space>
+                    </a-card>
+
+                    <!-- ⑥完成 -->
+                    <a-card v-else size="small" title="⑥ 完成须知阶段">
+                      <a-result
+                        :status="instCompleted ? 'success' : 'info'"
+                        :title="instCompleted ? '投标须知阶段已完成' : '确认完成后可进入投标报价'"
+                        :sub-title="
+                          instCompleted
+                            ? '附件清单与校验结果已保存。Word 套打导出后续开放。'
+                            : '将锁定本阶段状态；校验未通过时无法完成。'
+                        "
+                      >
+                        <template #extra>
+                          <a-space>
+                            <a-button @click="saveInstStep(4)">返回校验</a-button>
+                            <a-button
+                              type="primary"
+                              :loading="instSaving"
+                              :disabled="instCompleted"
+                              @click="completeInstructions"
+                            >
+                              {{ instCompleted ? '已完成' : '确认完成本阶段' }}
+                            </a-button>
+                            <a-button v-if="instCompleted" type="primary" ghost @click="goStep(3)">
+                              进入投标报价
+                            </a-button>
+                          </a-space>
+                        </template>
+                      </a-result>
+                    </a-card>
+                  </a-col>
+                </a-row>
+              </a-spin>
+            </a-card>
+
+            <!-- 阶段 3：投标报价 -->
+            <a-card v-else-if="currentStep === 3" title="阶段四 · 投标报价">
+              <template #extra>
+                <a-space>
+                  <a-button @click="goStep(2)">上一步</a-button>
+                  <a-button type="primary" ghost disabled>分析量单组价（即将开放）</a-button>
+                  <a-button type="primary" ghost @click="goStep(4)">跳过 / 进入下一阶段</a-button>
+                </a-space>
+              </template>
+              <a-result
+                status="info"
+                title="投标报价模块"
+                sub-title="将处理第三部分工程量清单、组价模板与材料询价。当前仅完成公告阶段能力。"
+              >
+                <template #extra>
+                  <a-tag color="orange">待开发</a-tag>
+                </template>
+              </a-result>
+            </a-card>
+
+            <!-- 阶段 4：合同与技术 -->
+            <a-card v-else title="阶段五 · 合同与技术资料">
+              <template #extra>
+                <a-button @click="goStep(3)">上一步</a-button>
+              </template>
+              <a-result
+                status="info"
+                title="合同 / 技术资料模块"
+                sub-title="对应第四部分分包合同、第五部分技术资料的结构化提取与冲突校验，后续开放。"
+              >
+                <template #extra>
+                  <a-tag color="orange">待开发</a-tag>
+                </template>
+              </a-result>
+            </a-card>
+          </template>
+        </a-layout-content>
+      </a-layout>
+    </a-layout>
+
+    <a-modal
+      v-model:open="createOpen"
+      title="新建项目"
+      ok-text="创建"
+      cancel-text="取消"
+      :confirm-loading="creating"
+      @ok="submitCreate"
+    >
+      <a-form layout="vertical">
+        <a-form-item label="项目名称" required>
+          <a-input v-model:value="form.name" placeholder="例如：廷杜夫240床医院机电分包" />
+        </a-form-item>
+        <a-form-item label="备注">
+          <a-textarea v-model:value="form.notes" :rows="3" />
+        </a-form-item>
+      </a-form>
+    </a-modal>
+  </a-config-provider>
+</template>
+
+<script setup>
+import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { message, Modal } from 'ant-design-vue'
+import zhCN from 'ant-design-vue/es/locale/zh_CN'
+import { api } from './api'
+
+const llmOk = ref(false)
+const projects = ref([])
+const loadingList = ref(false)
+const selectedId = ref(null)
+const detail = ref(null)
+const createOpen = ref(false)
+const creating = ref(false)
+const form = reactive({ name: '', notes: '' })
+const uploading = ref(false)
+const uploadPercent = ref(0)
+const analyzing = ref(false)
+const exporting = ref(false)
+const currentStep = ref(0)
+
+const instLoading = ref(false)
+const instSaving = ref(false)
+const instBodyAnalyzing = ref(false)
+const instRecord = ref(null)
+const selectedAttCode = ref(null)
+const wbAnalyzing = ref(false)
+const wbSaving = ref(false)
+const wbExporting = ref(false)
+const wbLockReason = ref('')
+const fieldAnalyzeHint = ref('')
+const editableFields = ref([])
+const signReminders = ref([])
+const masterForm = reactive({
+  enterprise: { bidder_name: '', credit_code: '', address: '', phone: '' },
+  legal_rep: { legal_rep_name: '', legal_rep_id_no: '', legal_rep_title: '法定代表人' },
+  agent: {
+    agent_org_name: '',
+    agent_name: '',
+    agent_id_no: '',
+    agent_gender: '',
+    agent_age: '',
+    agent_dept: '',
+    agent_title: '',
+  },
+  project: { project_name: '', employer_name: '', scope: '' },
+})
+const fieldColumnsPoa = [
+  { title: '字段', dataIndex: 'label', width: 140 },
+  { title: '必填', dataIndex: 'required', width: 70 },
+  { title: '来源库', dataIndex: 'source', width: 100 },
+  { title: '填写值', dataIndex: 'value', width: 220 },
+  { title: '模板依据', dataIndex: 'evidence', width: 180 },
+]
+let _saveFieldsTimer = null
+const condForm = reactive({
+  auth_filing: null,
+  auth_proof_note: '',
+  labor_applicable: null,
+  labor_checks: {
+    use_employer_quota: null,
+    non_employer_work: null,
+    accept_advance_deduct: null,
+    need_liability_boundary: null,
+  },
+  site_visit_confirm: null,
+})
+const baseForm = reactive({
+  project_name: '',
+  employer: '',
+  main_contractor: '',
+  scope: '',
+  bid_deadline: '',
+  currency: '',
+  bidder_name: '',
+  legal_representative: '',
+  agent_name: '',
+  locked_quote: '',
+  from_notice: false,
+})
+
+const validateColumns = [
+  { title: '编号', dataIndex: 'code', width: 100 },
+  { title: '检查项', dataIndex: 'name', width: 180 },
+  { title: '结果', dataIndex: 'passed', width: 90 },
+  { title: '说明', dataIndex: 'detail' },
+]
+
+const fieldColumns = [
+  { title: '字段', dataIndex: 'label', width: 140 },
+  { title: '提取值', dataIndex: 'value' },
+  { title: '原文证据', dataIndex: 'evidence' },
+  { title: '状态', dataIndex: 'status', width: 90 },
+]
+
+const hasZip = computed(() => !!detail.value?.project?.zip_name)
+const analysis = computed(() => detail.value?.notice_analysis || null)
+const noticeDone = computed(() => analysis.value?.status === 'done')
+const fields = computed(() => analysis.value?.result?.fields || [])
+const atomic = computed(() => analysis.value?.result?.atomic_requirements || [])
+const questions = computed(() => analysis.value?.result?.open_questions || [])
+const sourceSummary = computed(() => {
+  const s = analysis.value?.result?.source
+  if (!s) return ''
+  return `来源: ${s.path} · 语言: ${s.language} · 提取: ${s.extract_method} · 正文 ${s.text_length} 字`
+})
+
+const instState = computed(() => instRecord.value?.result || null)
+const instStep = computed(() => Number(instState.value?.workflow_step || 0))
+const instAttachments = computed(() => instState.value?.attachments || [])
+const instCompleted = computed(() => !!instState.value?.completed)
+const instValidation = computed(() => instState.value?.validation || { passed: false, items: [] })
+const instBrief = computed(() => instState.value?.instruction_brief || null)
+const instBriefSource = computed(() => {
+  const s = instBrief.value?.source
+  if (!s) return ''
+  return `来源: ${s.filename || s.rel_path || ''} · 提取: ${s.extract_method || '—'} · 正文 ${s.text_length || 0} 字`
+})
+const instBriefFieldColumns = [
+  { title: '字段', dataIndex: 'label', width: 140 },
+  { title: '提取值', dataIndex: 'value', width: 220 },
+  { title: '原文证据', dataIndex: 'evidence' },
+]
+const selectedAtt = computed(
+  () => instAttachments.value.find((a) => a.code === selectedAttCode.value) || instAttachments.value[0] || null,
+)
+const allIncludedDone = computed(() => {
+  const list = instAttachments.value.filter((a) => a.included !== false)
+  return list.length > 0 && list.every((a) => ['done', 'not_required', 'skipped'].includes(a.status))
+})
+const currentWorkCode = computed(() => {
+  const list = instAttachments.value.filter((a) => a.included !== false)
+  const hit = list.find((a) => !['done', 'not_required', 'skipped'].includes(a.status))
+  return hit?.code || null
+})
+const canExportCurrentDocx = computed(() => {
+  const k = selectedAtt.value?.kind
+  if (k === 'bid_commitment') return true
+  if (k === 'power_of_attorney' && condForm.auth_filing === 'not_filed') return true
+  return false
+})
+
+watch(selectedAtt, (a) => {
+  if (a && !selectedAttCode.value) selectedAttCode.value = a.code
+  if (a) syncWorkbenchFromAtt(a)
+})
+
+const stepItems = computed(() => [
+  {
+    title: '上传资料',
+    description: hasZip.value ? '已完成' : '上传 ZIP',
+    status: hasZip.value ? (currentStep.value === 0 ? 'process' : 'finish') : 'process',
+  },
+  {
+    title: '招标公告',
+    description: noticeDone.value ? '已完成' : '大模型提取',
+    disabled: !hasZip.value,
+    status: !hasZip.value
+      ? 'wait'
+      : noticeDone.value
+        ? currentStep.value === 1
+          ? 'process'
+          : 'finish'
+        : currentStep.value === 1
+          ? 'process'
+          : 'wait',
+  },
+  {
+    title: '投标须知',
+    description: instCompleted.value ? '已完成' : noticeDone.value ? '附件编制' : '需先完成公告',
+    disabled: !noticeDone.value,
+    status: !noticeDone.value
+      ? 'wait'
+      : instCompleted.value
+        ? currentStep.value === 2
+          ? 'process'
+          : 'finish'
+        : currentStep.value === 2
+          ? 'process'
+          : 'wait',
+  },
+  {
+    title: '投标报价',
+    description: '后续开放',
+    disabled: !noticeDone.value,
+    status: currentStep.value === 3 ? 'process' : 'wait',
+  },
+  {
+    title: '合同技术',
+    description: '后续开放',
+    disabled: !noticeDone.value,
+    status: currentStep.value === 4 ? 'process' : 'wait',
+  },
+])
+
+function stageShort(s) {
+  const map = {
+    created: '待上传',
+    ingested: '待分析公告',
+    notice_analyzed: '公告完成',
+    analyze_failed: '公告失败',
+    instructions_in_progress: '须知进行中',
+    instructions_done: '须知完成',
+  }
+  return map[s] || s || '—'
+}
+
+function statusColor(st) {
+  const map = {
+    pending_decision: 'orange',
+    not_required: 'default',
+    to_prepare: 'blue',
+    drafting: 'processing',
+    pending_confirm: 'gold',
+    pending_legal: 'purple',
+    pending_p6: 'cyan',
+    done: 'success',
+    conflict: 'error',
+  }
+  return map[st] || 'default'
+}
+
+function genLevelLabel(lv) {
+  return (
+    {
+      auto: '可自动生成',
+      semi: '系统生成后人工调整',
+      external: '专业软件编制',
+      legal: '法务审查后填写',
+      none: '只读',
+    }[lv] || lv
+  )
+}
+
+function sourceLabel(s) {
+  return (
+    {
+      enterprise: '企业信息库',
+      legal_rep: '法定代表人库',
+      agent: '授权代理人',
+      project: '项目信息',
+      quote: '最终报价',
+      manual: '手工填写',
+    }[s] ||
+    s ||
+    '—'
+  )
+}
+
+function isAttLocked(item) {
+  if (!currentWorkCode.value) return false
+  if (['done', 'not_required', 'skipped'].includes(item.status)) return false
+  return item.code !== currentWorkCode.value
+}
+
+function selectAttachment(item) {
+  if (isAttLocked(item)) {
+    message.warning(`请先完成当前附件 ${currentWorkCode.value}`)
+    return
+  }
+  selectedAttCode.value = item.code
+  loadWorkbench(item.code)
+}
+
+function syncWorkbenchFromAtt(att) {
+  if (!att) return
+  const fd = att.form_data || {}
+  editableFields.value = (fd.fields || []).map((f) => ({ ...f, value: f.value ?? '' }))
+  signReminders.value = fd.sign_reminder || []
+  fieldAnalyzeHint.value = fd.llm_error || ''
+  wbLockReason.value =
+    currentWorkCode.value &&
+    att.code !== currentWorkCode.value &&
+    !['done', 'not_required', 'skipped'].includes(att.status)
+      ? `请先完成 ${currentWorkCode.value}`
+      : ''
+}
+
+async function loadWorkbench(code) {
+  if (!selectedId.value || !code) return
+  try {
+    const { data } = await api.getAttachmentWorkbench(selectedId.value, code)
+    if (data.org_master) {
+      Object.assign(masterForm.enterprise, data.org_master.enterprise || {})
+      Object.assign(masterForm.legal_rep, data.org_master.legal_rep || {})
+      Object.assign(masterForm.agent, data.org_master.agent || {})
+      Object.assign(masterForm.project, data.org_master.project || {})
+    }
+    if (data.attachment && instState.value?.attachments) {
+      const list = instState.value.attachments
+      const idx = list.findIndex((a) => a.code === code)
+      if (idx >= 0) list[idx] = data.attachment
+      syncWorkbenchFromAtt(data.attachment)
+    }
+    wbLockReason.value = data.locked ? data.lock_reason || '请按顺序完成附件' : ''
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  }
+}
+
+async function onAuthFilingChange() {
+  await persistConditions()
+  await loadInstructions(false)
+  if (selectedAtt.value) syncWorkbenchFromAtt(selectedAtt.value)
+}
+
+async function saveMasterAndPrefill() {
+  if (!selectedId.value) return
+  wbSaving.value = true
+  try {
+    await api.saveOrgMaster(selectedId.value, {
+      enterprise: { ...masterForm.enterprise },
+      legal_rep: { ...masterForm.legal_rep },
+      agent: { ...masterForm.agent },
+      project: { ...masterForm.project },
+    })
+    const flat = {
+      ...masterForm.enterprise,
+      ...masterForm.legal_rep,
+      ...masterForm.agent,
+      ...masterForm.project,
+      company_name: masterForm.enterprise.bidder_name,
+      signer_name: masterForm.legal_rep.legal_rep_name || masterForm.agent.agent_name,
+    }
+    editableFields.value = editableFields.value.map((f) => {
+      if (f.value) return f
+      return { ...f, value: flat[f.key] || f.value || '' }
+    })
+    await saveFieldsNow()
+    message.success('主数据已保存并预填')
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    wbSaving.value = false
+  }
+}
+
+async function saveMasterQuoteAndPrefill() {
+  await persistBaseData()
+  await saveMasterAndPrefill()
+  const q = (baseForm.locked_quote || '').toString()
+  const m = q.match(/(\d+(?:[.,]\d+)?)/)
+  editableFields.value = editableFields.value.map((f) => {
+    let next = { ...f }
+    if (m && (f.key === 'amount_lower' || f.key === 'total_price_lower')) {
+      next.value = m[1]
+    }
+    if ((f.key === 'company_name' || f.key === 'bidder_name') && !f.value) {
+      next.value = masterForm.enterprise.bidder_name || f.value
+    }
+    if ((f.key === 'signer_name' || f.key === 'legal_rep_name') && !f.value) {
+      next.value = masterForm.legal_rep.legal_rep_name || f.value
+    }
+    if (f.key === 'project_name' && !f.value) {
+      next.value = masterForm.project.project_name || f.value
+    }
+    if (f.key === 'employer_name' && !f.value) {
+      next.value = masterForm.project.employer_name || f.value
+    }
+    return next
+  })
+  await saveFieldsNow()
+}
+
+async function analyzeCurrentFields() {
+  if (!selectedId.value || !selectedAtt.value) return
+  wbAnalyzing.value = true
+  try {
+    const { data } = await api.analyzeAttachmentFields(selectedId.value, selectedAtt.value.code)
+    await loadInstructions(false)
+    selectedAttCode.value = data.attachment?.code || selectedAtt.value.code
+    syncWorkbenchFromAtt(data.attachment)
+    if (data.org_master) {
+      Object.assign(masterForm.enterprise, data.org_master.enterprise || {})
+      Object.assign(masterForm.legal_rep, data.org_master.legal_rep || {})
+      Object.assign(masterForm.agent, data.org_master.agent || {})
+      Object.assign(masterForm.project, data.org_master.project || {})
+    }
+    message.success(`已识别 ${(data.attachment?.form_data?.fields || []).length} 个需填字段`)
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    wbAnalyzing.value = false
+  }
+}
+
+function saveFieldsDebounced() {
+  clearTimeout(_saveFieldsTimer)
+  _saveFieldsTimer = setTimeout(() => saveFieldsNow(), 400)
+}
+
+async function saveFieldsNow() {
+  if (!selectedId.value || !selectedAtt.value) return
+  wbSaving.value = true
+  try {
+    const { data } = await api.saveAttachmentFields(
+      selectedId.value,
+      selectedAtt.value.code,
+      editableFields.value,
+    )
+    await loadInstructions(false)
+    syncWorkbenchFromAtt(data.attachment)
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    wbSaving.value = false
+  }
+}
+
+async function exportCurrentDocx() {
+  if (!selectedId.value || !selectedAtt.value) return
+  await saveFieldsNow()
+  wbExporting.value = true
+  try {
+    const res = await api.exportAttachmentDocx(selectedId.value, selectedAtt.value.code)
+    const blob = new Blob([res.data], {
+      type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    })
+    let filename = `${selectedAtt.value.title || '附件'}_已填写待签章.docx`
+    const cd = res.headers?.['content-disposition'] || ''
+    const m = cd.match(/filename\*=UTF-8''([^;]+)|filename=\"?([^\";]+)\"?/i)
+    if (m) filename = decodeURIComponent(m[1] || m[2])
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+    message.success('已导出 Word，请打印盖章')
+  } catch (e) {
+    let msg = e.message
+    if (e.response?.data instanceof Blob) {
+      try {
+        const j = JSON.parse(await e.response.data.text())
+        msg = j.detail || msg
+      } catch {
+        /* ignore */
+      }
+    } else {
+      msg = e.response?.data?.detail || e.message
+    }
+    message.error(msg)
+  } finally {
+    wbExporting.value = false
+  }
+}
+
+async function completeCurrentAttachment() {
+  if (!selectedId.value || !selectedAtt.value) return
+  if (
+    (selectedAtt.value.kind === 'power_of_attorney' && condForm.auth_filing === 'not_filed') ||
+    selectedAtt.value.kind === 'bid_commitment'
+  ) {
+    await saveFieldsNow()
+  }
+  wbSaving.value = true
+  try {
+    const { data } = await api.completeAttachment(selectedId.value, selectedAtt.value.code)
+    await loadInstructions(false)
+    message.success('本附件已完成')
+    const next = (data.attachments_progress || []).find(
+      (a) => a.included !== false && !['done', 'not_required', 'skipped'].includes(a.status),
+    )
+    if (next) {
+      selectedAttCode.value = next.code
+      await loadWorkbench(next.code)
+      message.info(`请继续处理 ${next.code} ${next.title}`)
+    } else {
+      message.success('全部纳入附件已完成，可进入校验')
+    }
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    wbSaving.value = false
+  }
+}
+
+function statusOptionsFor(att) {
+  const common = [
+    { value: 'to_prepare', label: '待编制' },
+    { value: 'drafting', label: '编制中' },
+    { value: 'pending_confirm', label: '待人工确认' },
+    { value: 'done', label: '已完成' },
+    { value: 'conflict', label: '冲突' },
+  ]
+  if (att.kind === 'power_of_attorney') {
+    return [
+      { value: 'pending_decision', label: '待判断' },
+      { value: 'not_required', label: '无需提交' },
+      ...common,
+    ]
+  }
+  if (att.kind === 'labor_agreement') {
+    return [
+      { value: 'pending_decision', label: '待判断' },
+      { value: 'pending_legal', label: '待法务审定' },
+      ...common,
+    ]
+  }
+  if (att.kind === 'schedule') {
+    return [
+      { value: 'pending_p6', label: '待专业软件' },
+      ...common,
+    ]
+  }
+  return common
+}
+
+function syncFormsFromState() {
+  const st = instState.value
+  if (!st) return
+  const c = st.conditions || {}
+  condForm.auth_filing = c.auth_filing ?? null
+  condForm.auth_proof_note = c.auth_proof_note || ''
+  condForm.labor_applicable = c.labor_applicable ?? null
+  condForm.labor_checks = {
+    use_employer_quota: null,
+    non_employer_work: null,
+    accept_advance_deduct: null,
+    need_liability_boundary: null,
+    ...(c.labor_checks || {}),
+  }
+  condForm.site_visit_confirm = c.site_visit_confirm ?? null
+  const b = st.base_data || {}
+  Object.assign(baseForm, {
+    project_name: b.project_name || '',
+    employer: b.employer || '',
+    main_contractor: b.main_contractor || '',
+    scope: b.scope || '',
+    bid_deadline: b.bid_deadline || '',
+    currency: b.currency || '',
+    bidder_name: b.bidder_name || '',
+    legal_representative: b.legal_representative || '',
+    agent_name: b.agent_name || '',
+    locked_quote: b.locked_quote ?? '',
+    from_notice: !!b.from_notice,
+  })
+  if (!selectedAttCode.value && st.attachments?.length) {
+    selectedAttCode.value = st.attachments[0].code
+  }
+  // 编制阶段默认定位到当前待办附件
+  const work = (st.attachments || []).find(
+    (a) => a.included !== false && !['done', 'not_required', 'skipped'].includes(a.status),
+  )
+  if (work && Number(st.workflow_step || 0) >= 3) {
+    selectedAttCode.value = work.code
+    syncWorkbenchFromAtt(work)
+  }
+}
+
+async function analyzeInstructionBody() {
+  if (!selectedId.value) return
+  instBodyAnalyzing.value = true
+  try {
+    const { data } = await api.analyzeInstructionBody(selectedId.value)
+    instRecord.value = data
+    syncFormsFromState()
+    const n = (data.result?.instruction_brief?.key_fields || []).length
+    message.success(`投标须知分析完成（${n} 个关键字段）`)
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    instBodyAnalyzing.value = false
+  }
+}
+
+async function loadInstructions(forceScan = false) {
+  if (!selectedId.value || !noticeDone.value) return
+  instLoading.value = true
+  try {
+    const { data } = forceScan
+      ? await api.scanInstructions(selectedId.value, true)
+      : await api.getInstructions(selectedId.value)
+    instRecord.value = data
+    syncFormsFromState()
+    if (forceScan) message.success(`已扫描到 ${(data.result?.attachments || []).length} 个须知附件`)
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    instLoading.value = false
+  }
+}
+
+async function patchInst(payload) {
+  if (!selectedId.value) return
+  instSaving.value = true
+  try {
+    const { data } = await api.patchInstructions(selectedId.value, payload)
+    instRecord.value = data
+    syncFormsFromState()
+    return data
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+    throw e
+  } finally {
+    instSaving.value = false
+  }
+}
+
+async function onInstStepChange(n) {
+  await patchInst({ workflow_step: n })
+}
+
+async function saveInstStep(n) {
+  await patchInst({ workflow_step: n })
+}
+
+async function persistConditions() {
+  await patchInst({
+    conditions: {
+      auth_filing: condForm.auth_filing,
+      auth_proof_note: condForm.auth_proof_note,
+      labor_applicable: condForm.labor_applicable,
+      labor_checks: { ...condForm.labor_checks },
+      site_visit_confirm: condForm.site_visit_confirm,
+    },
+  })
+}
+
+async function setLaborCheck(key, checked) {
+  condForm.labor_checks[key] = checked
+  // 勾选表示 true；取消勾选置回 null（未确认）更符合「四项确认」语义
+  if (!checked) condForm.labor_checks[key] = false
+  await persistConditions()
+}
+
+async function persistBaseData() {
+  await patchInst({
+    base_data: {
+      project_name: baseForm.project_name,
+      employer: baseForm.employer,
+      main_contractor: baseForm.main_contractor,
+      scope: baseForm.scope,
+      bid_deadline: baseForm.bid_deadline,
+      currency: baseForm.currency,
+      bidder_name: baseForm.bidder_name,
+      legal_representative: baseForm.legal_representative,
+      agent_name: baseForm.agent_name,
+      locked_quote: baseForm.locked_quote || null,
+      from_notice: baseForm.from_notice,
+    },
+  })
+  message.success('基础数据已保存')
+}
+
+async function toggleAttIncluded(item, included) {
+  await patchInst({ attachment: { code: item.code, included } })
+}
+
+async function updateAttStatus(item, status) {
+  await patchInst({ attachment: { code: item.code, status } })
+}
+
+async function updateAttNotes(item, notes) {
+  await patchInst({ attachment: { code: item.code, notes } })
+}
+
+async function runInstValidate() {
+  await patchInst({ run_validate: true, workflow_step: 4 })
+  message.info(instValidation.value.passed ? '校验全部通过' : '存在未通过项，请按说明处理')
+}
+
+async function completeInstructions() {
+  try {
+    await patchInst({ run_validate: true, complete: true })
+    message.success('投标须知阶段已完成')
+    await loadProjects()
+  } catch {
+    /* error already toasted */
+  }
+}
+
+function syncStepFromDetail() {
+  if (!detail.value?.project) {
+    currentStep.value = 0
+    return
+  }
+  if (!hasZip.value) {
+    currentStep.value = 0
+  } else if (!noticeDone.value) {
+    currentStep.value = 1
+  } else {
+    // 公告已完成：停在公告结果页，用户可主动进下一阶段
+    if (currentStep.value < 1) currentStep.value = 1
+  }
+}
+
+function goStep(n) {
+  if (n >= 1 && !hasZip.value) {
+    message.warning('请先上传招标 ZIP 包')
+    return
+  }
+  if (n >= 2 && !noticeDone.value) {
+    message.warning('请先完成招标公告分析')
+    return
+  }
+  currentStep.value = n
+  if (n === 2) {
+    loadInstructions(false)
+  }
+}
+
+function onStepChange(n) {
+  goStep(n)
+}
+
+async function refreshHealth() {
+  try {
+    const { data } = await api.health()
+    llmOk.value = !!data.llm_configured
+  } catch {
+    llmOk.value = false
+  }
+}
+
+async function loadProjects() {
+  loadingList.value = true
+  try {
+    const { data } = await api.listProjects()
+    projects.value = data.items || []
+  } finally {
+    loadingList.value = false
+  }
+}
+
+async function loadDetail(id) {
+  const { data } = await api.getProject(id)
+  detail.value = data
+  if (data.instructions_analysis) {
+    instRecord.value = data.instructions_analysis
+    syncFormsFromState()
+  } else {
+    instRecord.value = null
+  }
+  syncStepFromDetail()
+}
+
+function openCreate() {
+  form.name = ''
+  form.notes = ''
+  createOpen.value = true
+}
+
+async function submitCreate() {
+  if (!form.name.trim()) {
+    message.warning('请填写项目名称')
+    return
+  }
+  creating.value = true
+  try {
+    const { data } = await api.createProject({ name: form.name.trim(), notes: form.notes })
+    createOpen.value = false
+    await loadProjects()
+    selectedId.value = data.id
+    await loadDetail(data.id)
+    currentStep.value = 0
+    message.success('项目已创建，请上传 ZIP')
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    creating.value = false
+  }
+}
+
+async function onSelectProject({ key }) {
+  selectedId.value = Number(key)
+  await loadDetail(selectedId.value)
+}
+
+function beforeUpload(file) {
+  doUpload(file)
+  return false
+}
+
+async function doUpload(file) {
+  if (!selectedId.value) return
+  uploading.value = true
+  uploadPercent.value = 0
+  try {
+    await api.uploadZip(selectedId.value, file, (evt) => {
+      if (evt.total) uploadPercent.value = Math.round((evt.loaded / evt.total) * 100)
+    })
+    message.success('ZIP 已入库，可进入公告分析')
+    await loadProjects()
+    await loadDetail(selectedId.value)
+    currentStep.value = 1
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+  } finally {
+    uploading.value = false
+    uploadPercent.value = 0
+  }
+}
+
+async function runAnalyze() {
+  if (!selectedId.value) return
+  analyzing.value = true
+  try {
+    await api.analyzeNotice(selectedId.value)
+    message.success('招标公告分析完成')
+    await loadProjects()
+    await loadDetail(selectedId.value)
+    currentStep.value = 1
+  } catch (e) {
+    message.error(e.response?.data?.detail || e.message)
+    await loadDetail(selectedId.value)
+  } finally {
+    analyzing.value = false
+  }
+}
+
+async function exportExcel() {
+  if (!selectedId.value) return
+  if (!hasZip.value) {
+    message.warning('请先上传招标 ZIP 包')
+    return
+  }
+  exporting.value = true
+  try {
+    const res = await api.exportExcel(selectedId.value)
+    const blob = new Blob([res.data], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    })
+    let filename = `${detail.value?.project?.name || '项目'}_招标文件结构化解读表.xlsx`
+    const cd = res.headers?.['content-disposition'] || ''
+    const m = cd.match(/filename\*=UTF-8''([^;]+)|filename=\"?([^\";]+)\"?/i)
+    if (m) {
+      filename = decodeURIComponent(m[1] || m[2])
+    }
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = filename
+    a.click()
+    URL.revokeObjectURL(url)
+    const rows = res.headers?.['x-export-rows']
+    message.success({ content: rows ? `已导出解读表（${rows} 条）` : '已导出解读表', key: 'export' })
+  } catch (e) {
+    let msg = e.message
+    const data = e.response?.data
+    if (data instanceof Blob) {
+      try {
+        const text = await data.text()
+        const j = JSON.parse(text)
+        msg = j.detail || text
+      } catch {
+        msg = await data.text()
+      }
+    } else {
+      msg = e.response?.data?.detail || e.message
+    }
+    message.error({ content: msg || '导出失败', key: 'export' })
+  } finally {
+    exporting.value = false
+  }
+}
+
+function removeProject() {
+  Modal.confirm({
+    title: '确认删除该项目？',
+    content: '将删除 ZIP 与各阶段分析结果',
+    okType: 'danger',
+    onOk: async () => {
+      await api.deleteProject(selectedId.value)
+      selectedId.value = null
+      detail.value = null
+      currentStep.value = 0
+      await loadProjects()
+      message.success('已删除')
+    },
+  })
+}
+
+watch(selectedId, (id) => {
+  if (!id) currentStep.value = 0
+})
+
+onMounted(async () => {
+  await refreshHealth()
+  await loadProjects()
+})
+</script>
+
+<style scoped>
+.layout { min-height: 100vh; }
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #001529;
+  padding: 0 20px;
+}
+.brand { display: flex; align-items: center; gap: 12px; }
+.title { color: #fff; font-size: 16px; font-weight: 600; }
+.header-right { display: flex; align-items: center; gap: 12px; }
+.sider { border-right: 1px solid #f0f0f0; padding-top: 8px; overflow: auto; }
+.sider-title { padding: 8px 16px; color: #8c8c8c; font-size: 12px; }
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+.menu-item .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content { margin: 16px; display: flex; flex-direction: column; gap: 12px; }
+.project-bar-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.project-name { font-size: 16px; font-weight: 600; }
+.project-meta { color: #8c8c8c; font-size: 13px; margin-top: 4px; }
+.steps-card :deep(.ant-card-body) { padding: 12px 16px; }
+.inst-doc {
+  font-size: 12px;
+  color: #595959;
+  margin-bottom: 8px;
+  word-break: break-all;
+}
+.inst-att-item {
+  cursor: pointer;
+}
+.inst-att-item.active {
+  background: #e6f4ff;
+}
+.inst-att-item.locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.inst-att-item.done {
+  border-left: 3px solid #52c41a;
+}
+.link-list {
+  margin: 4px 0 0;
+  padding-left: 18px;
+  color: #595959;
+  font-size: 12px;
+}
+.tpl-preview {
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 240px;
+  overflow: auto;
+  margin: 0;
+  font-size: 12px;
+  color: #434343;
+  background: #fafafa;
+  padding: 8px;
+}
+.brief-points {
+  margin: 0;
+  padding-left: 18px;
+  color: #434343;
+  font-size: 13px;
+}
+.muted { color: #8c8c8c; font-size: 12px; }
+</style>

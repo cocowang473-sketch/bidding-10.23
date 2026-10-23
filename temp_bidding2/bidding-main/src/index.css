@@ -1,0 +1,37 @@
+@import "tailwindcss";
+@import "./styles/proposalPrint.css";
+
+@media print {
+  body {
+    background-color: #ffffff !important;
+    color: #0f172a !important;
+  }
+  
+  /* 隐藏所有具有 no-print 类的非打印控制台、边栏和顶栏 */
+  .no-print {
+    display: none !important;
+  }
+  
+  #printable-prd-doc,
+  #printable-proposal-container {
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+
+  .print-page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  .print-avoid-break {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}

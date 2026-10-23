@@ -1,0 +1,6 @@
+{
+  "name": "投标智造 - 标书组件中心 (BidCraft Studio)",
+  "description": "专业级投标文件准备平台，提供标准化标书组件库、企业资质素材管理、智能变量替换与交互式标书组装工作台。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

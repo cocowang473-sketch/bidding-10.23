@@ -1,0 +1,88 @@
+import { ChangeHistoryRecord } from '../types/history';
+
+export const INITIAL_CHANGE_HISTORY: ChangeHistoryRecord[] = [
+  {
+    id: 'HIST-001',
+    actionType: 'rfq',
+    title: '采纳供应商最低回函并回填量单',
+    description: '在多商比选看板中采纳「宝胜电缆国际贸易分公司」报价 155 CNY，系统自动核准到港关税并刷新清单综合单价。',
+    target: 'CFO-06.01 接地裸铜绞线 50mm²',
+    operator: '高级商务工程师 · 王工',
+    timestamp: '2026-08-16 11:28:40',
+    timeAgo: '刚才',
+    details: {
+      before: '估算价 160 CNY (待定)',
+      after: '核定成交价 155 CNY (宝胜电缆)',
+    },
+  },
+  {
+    id: 'HIST-002',
+    actionType: 'pricing',
+    title: '调整主材进口关税与运杂费率继承',
+    description: '核验阿尔及利亚海关税则，确定中国产地主材执行 +30% 清关关税，国际海运港杂费率按 9% 计入。',
+    target: 'CFO-01.01 低压进出线配电柜 (TGBT 2500A)',
+    operator: '项目总经济师 · 陈总',
+    timestamp: '2026-08-16 11:15:12',
+    timeAgo: '13分钟前',
+    details: {
+      before: '关税待审定',
+      after: '+30% 关税生效 (折算 1,428 DZD)',
+    },
+  },
+  {
+    id: 'HIST-003',
+    actionType: 'quota',
+    title: '核验定额库人工固定基数',
+    description: '针对 2026 年阿尔及利亚属地劳务通胀测算，确认强电安装人工工日固定基数维持 6,500 DZD/工日。',
+    target: '全局定额计价参数',
+    operator: '造价组长 · 张工',
+    timestamp: '2026-08-16 10:42:00',
+    timeAgo: '46分钟前',
+    details: {
+      before: '基准工日 6,500 DZD',
+      after: '复核确认 6,500 DZD (误差 < 1.5%)',
+    },
+  },
+  {
+    id: 'HIST-004',
+    actionType: 'variable',
+    title: '标书通用条款变量穿透替换',
+    description: '响应招标文件澄清答疑文件第三号，将投标有效期由 90 天调整为 120 天，标书全章节实时联动替换。',
+    target: '标书条款第二章 · 商务报价保证',
+    operator: '法务商务经理 · 李工',
+    timestamp: '2026-08-16 09:30:18',
+    timeAgo: '2小时前',
+    details: {
+      before: '投标有效期: 90 天',
+      after: '投标有效期: 120 天',
+    },
+  },
+  {
+    id: 'HIST-005',
+    actionType: 'import',
+    title: '批量导入往期历史中标签单台账',
+    description: '从阿尔及尔光伏电站标段批量导入 8 笔物资签单凭证，命中量单对应项，系统自动将置信度跃升至 96%。',
+    target: '工程物资与历史签单库',
+    operator: '高级商务工程师 · 王工',
+    timestamp: '2026-08-16 08:50:00',
+    timeAgo: '今天早间',
+    details: {
+      before: '无历史签单映射 (置信度 75%)',
+      after: '完成 8 笔台账校核 (置信度 96%)',
+    },
+  },
+  {
+    id: 'HIST-006',
+    actionType: 'system',
+    title: '更新基准汇率与多币种折算基准',
+    description: '同步阿尔及利亚央行最新公布官方汇率，锁定 1 CNY = 18.5 DZD，1 EUR = 145.5 DZD。',
+    target: '国际汇率与造价参数引擎',
+    operator: '系统自动同调引擎',
+    timestamp: '2026-08-15 18:00:00',
+    timeAgo: '昨天',
+    details: {
+      before: '1 CNY = 18.2 DZD',
+      after: '1 CNY = 18.5 DZD',
+    },
+  },
+];

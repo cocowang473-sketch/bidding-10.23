@@ -1,0 +1,223 @@
+/* ============================================================================
+   投标书标准打印与交互排版专属样式模块 (Proposal Standard Print & Typesetting CSS)
+   遵循国家工程招投标及国际 FIDIC/北非 EPC 商务标格式规范
+   ============================================================================ */
+
+/* 屏幕端 A4 纸张拟真容器 (210mm x 297mm) */
+.a4-sheet-preview {
+  width: 210mm;
+  min-height: 297mm;
+  background-color: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.12), 0 2px 6px -1px rgba(15, 23, 42, 0.08);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  box-sizing: border-box;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  transition: transform 0.15s ease-in-out;
+}
+
+/* 字体族设置 */
+.font-songti {
+  font-family: "SimSun", "STSong", "Songti SC", "Source Han Serif CN", serif;
+}
+
+.font-fangsong {
+  font-family: "FangSong", "STFangsong", "FangSong_GB2312", serif;
+}
+
+.font-heiti {
+  font-family: "SimHei", "Microsoft YaHei", "STHeiti", sans-serif;
+}
+
+.font-times {
+  font-family: "Times New Roman", Times, "Baskerville", serif;
+}
+
+.font-garamond {
+  font-family: "Garamond", "Georgia", "EB Garamond", serif;
+}
+
+/* 目录引导点线 (Table of Contents Dots Leader) */
+.toc-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.toc-title {
+  padding-right: 8px;
+  background-color: #ffffff;
+  z-index: 1;
+}
+
+.toc-leader {
+  flex-grow: 1;
+  border-bottom: 1.5px dotted #94a3b8;
+  margin: 0 4px;
+  position: relative;
+  top: -3px;
+}
+
+.toc-page {
+  padding-left: 8px;
+  background-color: #ffffff;
+  z-index: 1;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* 盖章矩形印框 (Official Stamp Placeholder) */
+.official-stamp-box {
+  width: 140px;
+  height: 90px;
+  border: 1.5px dashed #dc2626;
+  border-radius: 6px;
+  color: #dc2626;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  background-color: rgba(254, 242, 242, 0.4);
+  user-select: none;
+}
+
+/* 防伪防扩散倾斜文字水印层 */
+.proposal-watermark-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.proposal-watermark-text {
+  font-family: "SimSun", "STSong", serif;
+  font-weight: 800;
+  white-space: nowrap;
+  letter-spacing: 0.15em;
+  user-select: none;
+}
+
+/* 双语左右分栏对照排版规则 */
+.bilingual-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.bilingual-left-zh {
+  border-right: 1px solid #e2e8f0;
+  padding-right: 20px;
+}
+
+.bilingual-right-fr {
+  padding-left: 4px;
+  font-style: italic;
+  font-family: "Garamond", "Times New Roman", serif;
+}
+
+/* ============================================================================
+   打印介质规则 (@media print) - 生成符合招投标归档标准的 PDF
+   ============================================================================ */
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  /* 隐藏所有外部界面元素、侧边栏、工具条、按钮 */
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    width: 210mm !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* 隐藏所有带 .no-print 的非排版元素 */
+  .no-print,
+  nav,
+  aside,
+  header,
+  .app-sidebar,
+  .app-header,
+  .typesetting-control-panel,
+  button,
+  input,
+  select {
+    display: none !important;
+  }
+
+  /* 确保根容器与主视口在打印时不被固定高度截断或滚动裁剪 */
+  #root,
+  main,
+  div[class*="overflow-hidden"],
+  #printable-proposal-container {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+    min-height: 0 !important;
+  }
+
+  /* 打印容器完全铺满并重置缩放 */
+  .proposal-print-viewport {
+    display: block !important;
+    position: static !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+    overflow: visible !important;
+  }
+
+  /* 打印时强行清除屏幕上的缩放 Transform，确保 1:1 精确输出 A4 */
+  .proposal-print-viewport > div {
+    transform: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 0 !important;
+  }
+
+  /* 每一页强制精准分页 */
+  .a4-sheet-preview {
+    page-break-after: always !important;
+    break-after: page !important;
+    box-shadow: none !important;
+    border: none !important;
+    margin: 0 !important;
+    width: 210mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    height: 297mm !important;
+    background: #ffffff !important;
+    overflow: hidden !important;
+  }
+
+  /* 最后一页不强制分页，防止空白页 */
+  .a4-sheet-preview:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
+  }
+
+  /* 章节内部避免断页 */
+  .avoid-page-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  /* 强制在新页开始 */
+  .force-page-break {
+    page-break-before: always !important;
+    break-before: page !important;
+  }
+}
