@@ -12,7 +12,7 @@ const mockFields: ExtractedField[] = [
   {
     key: 'project_name_zh',
     label: '项目中文名称',
-    value: '240床廷杜夫军方医院项目机电分包工程',
+    value: 'Phoenix 智慧医疗综合体机电分包工程',
     source: 'extracted',
     evidence: '1.第一部分、招标公告及其他/1.1 招标通告.doc',
     sourceFile: '1.1 招标通告.doc',
@@ -22,7 +22,7 @@ const mockFields: ExtractedField[] = [
   {
     key: 'project_name_fr',
     label: '项目法文名称',
-    value: 'Hôpital Militaire 240 Lits de Tindouf - Lot MEP',
+    value: 'Centre Médical Phoenix - Lot MEP',
     source: 'extracted',
     sourceFile: '1.1 招标通告.doc',
     sourcePage: '第1页',
@@ -31,7 +31,7 @@ const mockFields: ExtractedField[] = [
   {
     key: 'owner',
     label: '业主/招标方',
-    value: '阿尔及利亚国防部',
+    value: '海外国防部',
     source: 'extracted',
     sourceFile: '1.1 招标通告.doc',
     sourcePage: '第1页',
@@ -40,7 +40,7 @@ const mockFields: ExtractedField[] = [
   {
     key: 'main_contractor',
     label: '总承包商',
-    value: '中建二局',
+    value: '宏远国际',
     source: 'extracted',
     sourceFile: '1.1 招标通告.doc',
     category: 'project_basic',
@@ -55,7 +55,7 @@ const mockFields: ExtractedField[] = [
   {
     key: 'city',
     label: '项目所在城市',
-    value: '廷杜夫',
+    value: '北部沿海',
     source: 'extracted',
     category: 'project_basic',
   },
@@ -69,7 +69,7 @@ const mockFields: ExtractedField[] = [
   {
     key: 'scale',
     label: '工程规模',
-    value: '240 床位',
+    value: '约 200 床位综合规模',
     source: 'extracted',
     category: 'project_basic',
   },
@@ -254,7 +254,7 @@ const mockFields: ExtractedField[] = [
   {
     key: 'boq_file',
     label: '工程量清单文件',
-    value: '240床廷杜夫军方医院项目-机电参考量单.xlsx',
+    value: 'Phoenix智慧医疗综合体-机电参考量单.xlsx',
     source: 'extracted',
     sourceFile: '3.第三部分、投标报价/3.1 参考量单',
     category: 'boq_costing',

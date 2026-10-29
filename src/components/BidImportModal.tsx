@@ -131,7 +131,7 @@ const MOCK_FILE_STRUCTURE: ParsedFileNode[] = [
         path: '3/3.1',
         children: [
           {
-            name: '240床廷杜夫军方医院项目-机电参考量单.xlsx',
+            name: 'Phoenix 智慧医疗综合体项目-机电参考量单.xlsx',
             type: 'file',
             path: '3/3.1/1',
             fileType: 'xlsx',
@@ -172,7 +172,7 @@ const MOCK_FILE_STRUCTURE: ParsedFileNode[] = [
     path: '4',
     children: [
       {
-        name: '4.1 240床廷杜夫军方医院项目机电分包合同.docx',
+        name: '4.1 Phoenix 智慧医疗综合体项目机电分包合同.docx',
         type: 'file',
         path: '4/4.1',
         fileType: 'doc',

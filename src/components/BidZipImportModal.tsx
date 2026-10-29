@@ -22,7 +22,7 @@ export const BidZipImportModal: React.FC<BidZipImportModalProps> = ({
   isOpen,
   onClose,
   onImported,
-  defaultProjectName = '阿尔及利亚 240 床廷杜夫医院 · 机电分包',
+  defaultProjectName = '阿尔及利亚 Phoenix 智慧医疗综合体 · 机电分包',
 }) => {
   const [file, setFile] = useState<File | null>(null);
   const [projectName, setProjectName] = useState(defaultProjectName);

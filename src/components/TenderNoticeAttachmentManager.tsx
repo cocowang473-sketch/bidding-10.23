@@ -259,22 +259,22 @@ export const TenderNoticeAttachmentManager: React.FC<TenderNoticeAttachmentManag
     } else if (presetType === 'cscec_bilingual') {
       const bilingualFiles: StagedFileItem[] = [
         {
-          id: `STAGE-CSCEC-01`,
-          name: '中建二局阿尔及利亚工程总包招标文件正文',
-          nameFr: 'Dossier d\'Appel d\'Offres CSCEC-II Algérie - Lot Courants Forts',
+          id: `STAGE-HYI-01`,
+          name: '海外工程总包招标文件正文',
+          nameFr: 'Dossier d\'Appel d\'Offres HYI Group Algérie - Lot Courants Forts',
           size: '6.4 MB',
           fileType: 'pdf',
           category: 'legal',
           categoryLabel: '总包文件',
           categoryLabelFr: 'Dossier Général',
           langTag: 'bilingual',
-          docNumber: 'CSCEC-DZ-2026-001',
+          docNumber: 'HYI-INTL-2026-001',
           status: 'ready',
           summaryZh: '包含中法双语合同通用与专用条款、履约保函与付款节点要求。',
           summaryFr: 'Clauses contractuelles bilingues, caution de bonne fin et jalons de paiement.',
         },
         {
-          id: `STAGE-CSCEC-02`,
+          id: `STAGE-HYI-02`,
           name: '中法双语强电安装定额与物料清单规范.xlsx',
           nameFr: 'Bordereau Bilingue & Spécifications Électriques.xlsx',
           size: '4.2 MB',
@@ -283,7 +283,7 @@ export const TenderNoticeAttachmentManager: React.FC<TenderNoticeAttachmentManag
           categoryLabel: '清单定额',
           categoryLabelFr: 'Bordereau BQE',
           langTag: 'bilingual',
-          docNumber: 'BQE-CSCEC-02',
+          docNumber: 'BQE-HYI-02',
           status: 'ready',
           summaryZh: '全案 12 项物资双语对照及原币基准采购参考价。',
           summaryFr: 'Correspondance bilingue des matériaux et prix d\'achat de référence.',
@@ -539,7 +539,7 @@ export const TenderNoticeAttachmentManager: React.FC<TenderNoticeAttachmentManag
                         className="p-2.5 rounded-lg border border-slate-200 hover:border-blue-400 bg-white hover:bg-blue-50/30 text-left transition-all cursor-pointer group"
                       >
                         <div className="font-semibold text-slate-800 group-hover:text-blue-700 text-xs">
-                          🏥 阿尔及利亚 240 医院全套法文标
+                          🏥 阿尔及利亚 Phoenix 智慧医疗综合体全套法文标
                         </div>
                         <div className="text-[10px] text-slate-500 mt-0.5">
                           含 BOMOP 通告、RC 须知、CCTP 规格书与 BQE
@@ -1575,7 +1575,7 @@ function generateMockPackageParseResult(
       id: `ATT-UNPACK-01`,
       name: isZhPackage ? '官方招标通告正文 (Avis d\'Appel d\'Offres)' : '官方招标通告正文 (Avis BOMOP)',
       nameFr: 'Avis d\'Appel d\'Offres International (BOMOP)',
-      fileName: 'Avis-BOMOP-Appel-Offres-Hopital-240Lits.pdf',
+      fileName: 'Avis-BOMOP-Appel-Offres-CentreMedical-Phoenix.pdf',
       category: 'legal',
       fileType: 'pdf',
       fileSize: '2.1 MB',
@@ -1586,16 +1586,16 @@ function generateMockPackageParseResult(
       officialDocNumber: 'DZ-SANTE-2026-CFO-009',
       importance: 'critical',
       verificationStatus: 'verified',
-      summary: '阿尔及利亚国家公报 (BOMOP) 刊载之 240 床综合医院强电工程国际公开招标通告。',
-      summaryFr: 'Avis d\'appel d\'offres national et international restreint publié au BOMOP pour l\'Hôpital 240 Lits.',
-      previewSnippet: `Avis d'Appel d'Offres International Restreint N° DZ-SANTE-2026-CFO-009\nProjet: Réalisation d'un Hôpital de 240 Lits à Tizi Ouzou - Lot 09 Électricité CFO/CFA.\nMaître de l'Ouvrage: Ministère de la Santé, de la Population et de la Réforme Hospitalière.`,
-      previewSnippetFr: `Avis d'Appel d'Offres International Restreint N° DZ-SANTE-2026-CFO-009\nProjet: Réalisation d'un Hôpital de 240 Lits à Tizi Ouzou - Lot 09 Électricité CFO/CFA.\nMaître de l'Ouvrage: Ministère de la Santé, de la Population et de la Réforme Hospitalière.`,
-      previewSnippetZh: `国际公开招标通告文号: DZ-SANTE-2026-CFO-009\n工程项目: 阿尔及利亚提济乌祖 240 床综合医院建设 - 标段 09 强电与智能化系统。\n招标单位: 阿尔及利亚国家卫生与人口部。`,
+      summary: '阿尔及利亚国家公报 (BOMOP) 刊载之 Phoenix 项目规模综合医院强电工程国际公开招标通告。',
+      summaryFr: 'Avis d\'appel d\'offres national et international restreint publié au BOMOP pour l\'Centre Médical Phoenix.',
+      previewSnippet: `Avis d'Appel d'Offres International Restreint N° DZ-SANTE-2026-CFO-009\nProjet: Réalisation d'un Centre Médical Phoenix à Alger Nord - Lot 09 Électricité CFO/CFA.\nMaître de l'Ouvrage: Ministère de la Santé, de la Population et de la Réforme Hospitalière.`,
+      previewSnippetFr: `Avis d'Appel d'Offres International Restreint N° DZ-SANTE-2026-CFO-009\nProjet: Réalisation d'un Centre Médical Phoenix à Alger Nord - Lot 09 Électricité CFO/CFA.\nMaître de l'Ouvrage: Ministère de la Santé, de la Population et de la Réforme Hospitalière.`,
+      previewSnippetZh: `国际公开招标通告文号: DZ-SANTE-2026-CFO-009\n工程项目: 阿尔及利亚Phoenix 智慧医疗综合体建设 - 标段 09 强电与智能化系统。\n招标单位: 阿尔及利亚国家卫生与人口部。`,
       linkedVariables: [
         {
           variableKey: '项目名称',
           sourceClause: '招标公告标题',
-          extractedValue: '阿尔及利亚 240 床综合医院强电与智能化系统工程',
+          extractedValue: '阿尔及利亚 Phoenix 国际智慧医疗综合体机电总承包工程',
           pageNumber: 1,
         },
         {
@@ -1734,15 +1734,15 @@ function generateMockPackageParseResult(
       labelFr: 'Intitulé du Projet',
       category: '项目基础',
       source: 'extracted',
-      currentValue: '阿尔及利亚 240 床综合医院强电与智能化系统工程',
-      extractedValue: '阿尔及利亚 240 床综合医院强电与智能化系统工程',
-      extractedValueFr: 'Projet de réalisation d\'un Hôpital de 240 Lits - Électricité CFO/CFA',
+      currentValue: '阿尔及利亚 Phoenix 国际智慧医疗综合体机电总承包工程',
+      extractedValue: '阿尔及利亚 Phoenix 国际智慧医疗综合体机电总承包工程',
+      extractedValueFr: 'Projet de réalisation d\'un Centre Médical Phoenix - Électricité CFO/CFA',
       sourceDocName: 'Avis-BOMOP-Appel-Offres.pdf',
       sourceClause: '招标公告第 1 条',
       sourceClauseFr: 'Avis BOMOP Article 1',
-      highlightText: "Projet de réalisation d'un Hôpital de 240 Lits à Tizi Ouzou",
-      highlightTextFr: "Projet de réalisation d'un Hôpital de 240 Lits à Tizi Ouzou",
-      highlightTextZh: "提济乌祖 240 床综合医院强电与智能化系统工程项目",
+      highlightText: "Projet de réalisation du Centre Médical Phoenix",
+      highlightTextFr: "Projet de réalisation du Centre Médical Phoenix",
+      highlightTextZh: "Phoenix 智慧医疗综合体强电与智能化系统工程项目",
     },
     {
       variableKey: '招标编号',
@@ -1895,7 +1895,7 @@ function generateMockPackageParseResult(
       labelFr: 'Raison Sociale du Soumissionnaire',
       category: '主体资质',
       source: 'missing_manual',
-      currentValue: currentValues['投标人法定名称'] || '中国建筑第二工程局有限公司 (CSCEC-II)',
+      currentValue: currentValues['投标人法定名称'] || '宏远国际工程集团有限公司 (HYI Group)',
     },
     {
       variableKey: '法定代表人姓名',

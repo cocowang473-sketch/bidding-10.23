@@ -52,14 +52,14 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
 
         const pagesData = [
           {
-            title: '中建二局 · 海外工程智能造价与供应链协同平台',
+            title: 'BidCraft · 招投标智能造价与供应链协同平台',
             subtitle: '产品功能清单、系统架构说明与详细交互逻辑规范 (PRD/BRD)',
-            meta: '版本: v4.2.0 | 编制: 海外工程商务部',
+            meta: '版本: v4.2.0 | 编制: 宏远国际工程集团海外事业部',
             sections: [
               {
                 heading: '一、系统整体定位与业务背景',
                 lines: [
-                  '1. 业务痛点分析：海外EPC工程（阿尔及利亚等法标国家）投标与采购面临中外规范差异大、',
+                  '1. 业务痛点分析：大型EPC工程（阿尔及利亚等法标国家）投标与采购面临中外规范差异大、',
                   '   语言隔阂易造成“货不对版”；同时存在CNY/EUR/USD/DZD混合币种与30%关税，传统手工',
                   '   Excel组价极易公式断裂、汇率更新不及时；往期中标合同散落，无法在编制新标书时复用。',
                   '2. 系统定位：面向海外工程投标的专业级B2B SaaS平台，打通“标书组装 + BOQ组价 + ',
@@ -83,7 +83,7 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
           {
             title: '三、全景产品功能清单矩阵 (核心功能项)',
             subtitle: '全系统22项子功能矩阵规划与输出规范',
-            meta: 'CostOS Enterprise Feature Matrix',
+            meta: 'BidCraft Enterprise Feature Matrix',
             sections: [
               {
                 heading: '核心功能清单 (Feature Matrix Overview)',
@@ -256,14 +256,14 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
 
           ctx.fillStyle = '#64748b';
           ctx.font = 'normal 18px "PingFang SC", "Microsoft YaHei", sans-serif';
-          ctx.fillText('中建二局海外工程商务部 · 研发成果规范 | FIDIC 商务标准', 80, canvasHeight - 60);
+          ctx.fillText('宏远国际工程集团海外事业部 · 研发成果规范 | FIDIC 商务标准', 80, canvasHeight - 60);
           ctx.fillText(`第 ${pageIdx + 1} 页 / 共 ${pagesData.length} 页`, canvasWidth - 240, canvasHeight - 60);
 
           const imgData = canvas.toDataURL('image/jpeg', 0.95);
           doc.addImage(imgData, 'JPEG', 0, 0, pageWidth, pageHeight);
         });
 
-        doc.save('海外工程智能造价与供应链协同平台_产品架构与交互逻辑规范(CostOS_v4.2).pdf');
+        doc.save('招投标智能协同平台_产品架构与交互逻辑规范(BidCraft_v4.2).pdf');
       } catch (e) {
         console.error('PDF generation error:', e);
         window.print();
@@ -275,12 +275,12 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
 
   // 复制完整 Markdown 文档
   const handleCopyMarkdown = () => {
-    const markdownContent = `# 中建二局 · 海外工程智能造价与供应链协同平台 (CostOS v4.2)
+    const markdownContent = `# BidCraft · 招投标智能造价与供应链协同平台 (BidCraft v4.2)
 ## 产品功能清单、系统架构说明与详细交互逻辑设计规范 (PRD/BRD)
 
 **文档版本**：v4.2.0 Enterprise  
 **编制部门**：海外工程事业部 · 商务造价与数智化研发组  
-**基准工程**：阿尔及利亚 240 床综合医院标段（CFO 强电与弱电工程）  
+**基准工程**：阿尔及利亚 Phoenix 国际智慧医疗综合体标段（CFO 强电与弱电工程）  
 **最后修订**：2026年10月  
 
 ---
@@ -633,7 +633,7 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>海外工程智能造价与供应链协同平台_产品架构与交互逻辑规范_CostOS_v4.2.pdf</title>
+  <title>招投标智能协同平台_产品架构与交互逻辑规范_BidCraft_v4.2.pdf</title>
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -663,8 +663,8 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
 </head>
 <body>
   <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; margin-bottom: 24px;">
-    <div><strong>中建二局海外工程商务部 · 研发成果规范</strong></div>
-    <div style="font-size: 12px; color: #64748b;">文档版本: CostOS v4.2.0 | 生成时间: 2026-10</div>
+    <div><strong>宏远国际工程集团海外事业部 · 研发成果规范</strong></div>
+    <div style="font-size: 12px; color: #64748b;">文档版本: BidCraft v4.2.0 | 生成时间: 2026-10</div>
   </div>
   ${printableElement.innerHTML}
   <script>
@@ -680,7 +680,7 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', '海外工程智能造价与供应链协同平台_产品架构与交互逻辑规范(支持一键存为PDF).html');
+    link.setAttribute('download', '招投标智能造价与供应链协同平台_产品架构与交互逻辑规范(支持一键存为PDF).html');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -704,11 +704,11 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
                   产品功能清单、系统架构说明与详细交互逻辑规范 (PRD)
                 </h2>
                 <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">
-                  CostOS v4.2
+                  BidCraft v4.2
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5">
-                中建二局 · 海外工程商务标组价与采购协同系统
+                BidCraft · 招投标商务标组价与采购协同系统
               </p>
             </div>
           </div>
@@ -829,12 +829,12 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
             {/* 文档封面头 */}
             <div className="border-b border-slate-300 pb-8">
               <div className="flex items-center gap-2 text-xs font-bold text-blue-700 uppercase tracking-widest mb-2">
-                <span>CSCEC Overseas Engineering System Specification</span>
+                <span>BidCraft International Tender Collaboration Platform Specification</span>
                 <span>•</span>
                 <span>Product Requirements Document (PRD)</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                海外工程智能造价与供应链协同平台 (CostOS v4.2)
+                招投标智能造价与供应链协同平台 (BidCraft v4.2)
               </h1>
               <p className="text-lg text-slate-600 font-medium mt-1">
                 产品功能清单、系统架构说明与详细交互逻辑规范手册
@@ -844,11 +844,11 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 bg-slate-50 p-4 rounded-xl border border-slate-200 text-xs text-slate-600">
                 <div>
                   <span className="text-slate-400 block mb-0.5">编制主体</span>
-                  <span className="font-semibold text-slate-800">中建二局海外工程商务部</span>
+                  <span className="font-semibold text-slate-800">宏远国际工程集团海外事业部</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block mb-0.5">基准示范工程</span>
-                  <span className="font-semibold text-slate-800">阿尔及利亚 240 床综合医院</span>
+                  <span className="font-semibold text-slate-800">阿尔及利亚 Phoenix 智慧医疗综合体</span>
                 </div>
                 <div>
                   <span className="text-slate-400 block mb-0.5">规范版本</span>
@@ -871,7 +871,7 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
 
                 <div className="prose text-sm text-slate-700 space-y-3">
                   <p>
-                    海外大型工程总承包 (EPC) 投标业务场景具有高度的复杂性。以中建二局在北非（阿尔及利亚等法标国家）承接的医疗与公建标段为例，传统依赖多名造价工程师各自维护本地 Excel 表格的做法存在严重的业务瓶颈：
+                    大型工程总承包 (EPC) 投标业务场景具有高度的复杂性。以典型 EPC 承包商在北非（阿尔及利亚等法标国家）承接的医疗与公建标段为例，传统依赖多名造价工程师各自维护本地 Excel 表格的做法存在严重的业务瓶颈：
                   </p>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
@@ -932,7 +932,7 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
                   <h3 className="font-bold text-sm text-slate-900">2.1 整体信息架构 (Information Architecture)</h3>
                   <div className="border border-slate-200 rounded-xl overflow-hidden text-xs">
                     <div className="bg-slate-100 p-3 font-bold text-slate-800 border-b border-slate-200">
-                      CostOS 顶层功能架构布局 (Top-Level Information Architecture)
+                      BidCraft 顶层功能架构布局 (Top-Level Information Architecture)
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-4 divide-y md:divide-y-0 md:divide-x divide-slate-200 bg-white">
                       <div className="p-3.5 space-y-2">
@@ -1506,12 +1506,12 @@ export const ProductDocModal: React.FC<ProductDocModalProps> = ({ isOpen, onClos
             {/* 文档尾部签名与审计区 */}
             <div className="pt-8 border-t border-slate-300 text-xs text-slate-500 flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span>中建二局海外工程商务部 · 数智造价研发组编制</span>
+                <span>宏远国际工程集团海外事业部 · 数智造价研发组编制</span>
                 <span className="mx-2">|</span>
                 <span>遵循 FIDIC 国际工程招标商务合同规范</span>
               </div>
               <div className="font-mono text-slate-400">
-                DOC_ID: PRD-CSCEC2-2026-COSTOS-V4.2 • A4/PDF READY
+                DOC_ID: PRD-BIDCRAFT-2026-V4.2 • A4/PDF READY
               </div>
             </div>
 

@@ -44,11 +44,11 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
 
   // 预设样例包 1：阿尔及尔大清真寺项目真实历史签单包
   const handleLoadDemoPackageMosque = () => {
-    setFileName('CSCEC_嘉玛大清真寺机电签约历史数据_2025Q4.xlsx');
+    setFileName('HYI_嘉玛大清真寺机电签约历史数据_2025Q4.xlsx');
     const demo: HistoricalContractRecord[] = [
       {
         id: `IMP-${Date.now()}-01`,
-        contractNo: 'HT-CSCEC-ALG-2025-081',
+        contractNo: 'HT-HYI-INTL-2025-081',
         projectName: '阿尔及尔嘉玛大清真寺项目 (Djamaa el Djazaïr)',
         materialName: '接地裸铜绞线 50mm²',
         materialSpec: '国标/IEC标准 裸铜 50mm² 导电率 ≥98%',
@@ -66,7 +66,7 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
       },
       {
         id: `IMP-${Date.now()}-02`,
-        contractNo: 'HT-CSCEC-ALG-2025-082',
+        contractNo: 'HT-HYI-INTL-2025-082',
         projectName: '阿尔及尔嘉玛大清真寺项目',
         materialName: '低压进线总配电柜 TGBT 2500A',
         materialSpec: '2500A 4P 50kA IP54 施耐德 Masterpact MTZ',
@@ -84,7 +84,7 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
       },
       {
         id: `IMP-${Date.now()}-03`,
-        contractNo: 'HT-CSCEC-ALG-2025-083',
+        contractNo: 'HT-HYI-INTL-2025-083',
         projectName: '阿尔及尔嘉玛大清真寺项目',
         materialName: '耐火动力电缆 U-1000 R2V 4x185mm²',
         materialSpec: 'U-1000 R2V 4x185mm² 铜芯阻燃',
@@ -102,7 +102,7 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
       },
       {
         id: `IMP-${Date.now()}-04`,
-        contractNo: 'HT-CSCEC-ALG-2025-084',
+        contractNo: 'HT-HYI-INTL-2025-084',
         projectName: '阿尔及尔嘉玛大清真寺项目',
         materialName: '镀锌电缆梯架 300x50mm',
         materialSpec: '300x50x1.5mm 热镀锌',
@@ -126,11 +126,11 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
 
   // 预设样例包 2：奥兰奥林匹克综合体育场
   const handleLoadDemoPackageStadium = () => {
-    setFileName('CSCEC_奥兰奥林匹克综合体育场_机电签单台账.csv');
+    setFileName('HYI_奥兰奥林匹克综合体育场_机电签单台账.csv');
     const demo: HistoricalContractRecord[] = [
       {
         id: `IMP-${Date.now()}-11`,
-        contractNo: 'HT-CSCEC-ALG-2025-044',
+        contractNo: 'HT-HYI-INTL-2025-044',
         projectName: '奥兰奥林匹克综合体育场项目 (Stade Olympique d’Oran)',
         materialName: '发电机与市电双电源自动切换配电柜',
         materialSpec: '800A 4P PC级 带自启动接点',
@@ -148,7 +148,7 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
       },
       {
         id: `IMP-${Date.now()}-12`,
-        contractNo: 'HT-CSCEC-ALG-2025-045',
+        contractNo: 'HT-HYI-INTL-2025-045',
         projectName: '奥兰奥林匹克综合体育场项目',
         materialName: '密集型铜母线槽 1600A',
         materialSpec: '1600A 4P+PE IP66 铜导体',
@@ -166,7 +166,7 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
       },
       {
         id: `IMP-${Date.now()}-13`,
-        contractNo: 'HT-CSCEC-ALG-2025-046',
+        contractNo: 'HT-HYI-INTL-2025-046',
         projectName: '奥兰奥林匹克综合体育场项目',
         materialName: '楼层医用负荷动力配电箱',
         materialSpec: '63A 380V/220V 16回出线 IP55',
@@ -295,7 +295,7 @@ export const HistoricalContractImportModal: React.FC<HistoricalContractImportMod
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', 'CSCEC_海外工程历史签单导入标准模板.csv');
+    link.setAttribute('download', 'HYI_海外工程历史签单导入标准模板.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

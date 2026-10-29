@@ -1,10 +1,10 @@
 import { ProposalSection, VariableMeta, VariableValues } from '../types/proposalVariables';
 
 export const INITIAL_VARIABLE_VALUES: VariableValues = {
-  项目名称: '阿尔及利亚 240 床综合医院强电与智能化系统工程',
+  项目名称: '阿尔及利亚 Phoenix 国际智慧医疗综合体机电总承包工程',
   招标编号: 'DZ-SANTE-2026-CFO-009',
   招标人名称: '阿尔及利亚国家卫生与人口部 (Ministère de la Santé)',
-  投标人法定名称: '中国建筑第二工程局有限公司 (CSCEC-II)',
+  投标人法定名称: '宏远国际工程集团有限公司 (HYI Group)',
   法定代表人姓名: '石雨',
   授权委托人姓名: '张志强',
   委托人职务: '海外事业部总工程师',
@@ -19,16 +19,16 @@ export const INITIAL_VARIABLE_VALUES: VariableValues = {
   建造师注册编号: '京1112020202108892',
   投标总价: '1,286,450,000 DZD',
   投标保证金金额: '25,000,000 DZD',
-  工程交付地点: '阿尔及利亚提济乌祖省 (Tizi Ouzou)',
+  工程交付地点: '阿尔及利亚阿尔及尔北部 (Alger Nord)',
   工程质保期: '2',
   应急响应时间: '2',
 };
 
 export const INITIAL_VARIABLE_VALUES_FR: Record<string, string> = {
-  项目名称: "Travaux d'électricité CFO/CFA de l'Hôpital de 240 Lits à Tizi Ouzou",
+  项目名称: "Travaux d'électricité CFO/CFA du Centre Médical Phoenix",
   招标编号: 'DZ-SANTE-2026-CFO-009',
   招标人名称: "Ministère de la Santé, de la Population et de la Réforme Hospitalière",
-  投标人法定名称: 'China State Construction Engineering Corp. (CSCEC-II)',
+  投标人法定名称: 'Hongyuan International Engineering Group (HYI Group)',
   法定代表人姓名: 'Shi Yu',
   授权委托人姓名: 'Zhang Zhiqiang',
   委托人职务: 'Ingénieur en Chef de la Division Internationale',
@@ -43,7 +43,7 @@ export const INITIAL_VARIABLE_VALUES_FR: Record<string, string> = {
   建造师注册编号: 'JING-1112020202108892',
   投标总价: '1.286.450.000,00 DZD',
   投标保证金金额: '25.000.000,00 DZD',
-  工程交付地点: 'Nouvelle Ville de Tizi Ouzou, Wilaya de Tizi Ouzou, Algérie',
+  工程交付地点: 'Nouvelle Ville d\'Alger Nord, Wilaya d\'Alger Nord, Algérie',
   工程质保期: '2 ans entiers',
   应急响应时间: '2 heures',
 };

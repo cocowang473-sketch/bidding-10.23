@@ -422,7 +422,7 @@ export const EmailRfqHubView: React.FC<EmailRfqHubViewProps> = ({
               <div className="font-semibold text-slate-500 text-[11px]">渠道 01</div>
               <div className="font-bold text-slate-900 mt-0.5">国内历史中标库</div>
               <p className="text-slate-500 text-[11px] mt-1">
-                中建二局 1 年内已签合同单价库优先匹配。
+                宏远国际 1 年内已签合同单价库优先匹配。
               </p>
             </div>
 
@@ -707,7 +707,7 @@ export const EmailRfqHubView: React.FC<EmailRfqHubViewProps> = ({
                           </div>
 
                           <span className="text-[11px] text-slate-400 font-mono">
-                            CSCEC-II Official Mail Server
+                            HYI Group Official Mail Server
                           </span>
                         </div>
 
@@ -723,7 +723,7 @@ export const EmailRfqHubView: React.FC<EmailRfqHubViewProps> = ({
                           <div className="whitespace-pre-wrap text-slate-700 leading-relaxed pt-1 text-xs">
                             {rfq.perSupplierEmails?.[currentSelectedSupplierTab]?.body ||
                               rfq.emailBody ||
-                              `致：${currentSelectedSupplierTab} 商务与投标负责人：\n我司正在进行阿尔及利亚 240 医院项目关键设备采购，现针对【${rfq.materialName}】(${rfq.materialSpec})，需求数量 ${rfq.quantityNeeded} ${rfq.unit} 发起正式商务询价。\n随信附带工程实物样照与接口图样附件，请查收并回复正式盖章报价单。\n\n顺祝商祺！\n中国建筑第二工程局有限公司 (CSCEC-II) 海外工程事业部`}
+                              `致：${currentSelectedSupplierTab} 商务与投标负责人：\n我司正在进行阿尔及利亚 Phoenix 智慧医疗综合体项目关键设备采购，现针对【${rfq.materialName}】(${rfq.materialSpec})，需求数量 ${rfq.quantityNeeded} ${rfq.unit} 发起正式商务询价。\n随信附带工程实物样照与接口图样附件，请查收并回复正式盖章报价单。\n\n顺祝商祺！\n宏远国际工程集团有限公司 (HYI Group) 海外工程事业部`}
                           </div>
                         </div>
                       </div>

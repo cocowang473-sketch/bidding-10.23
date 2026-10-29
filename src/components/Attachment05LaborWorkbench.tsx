@@ -515,7 +515,7 @@ export const Attachment05LaborWorkbench: React.FC<Attachment05LaborWorkbenchProp
             <div>
               <h3 className="text-sm font-bold text-blue-950 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 text-blue-700" />
-                <span>阿尔及利亚 240 床综合医院机电工程全周期劳动力负荷动态曲线</span>
+                <span>阿尔及利亚 Phoenix 智慧医疗综合体机电工程全周期劳动力负荷动态曲线</span>
               </h3>
               <p className="text-xs text-blue-800/80 mt-0.5">
                 根据施工阶段分部工程量自动绘制，清晰呈现中国核心技工（40%）与属地施工力量（60%）的投入走势
@@ -1133,7 +1133,7 @@ export const Attachment05LaborWorkbench: React.FC<Attachment05LaborWorkbenchProp
                   onChange={(e) => handleUpdateChineseWorkerField('headquartersDispatched', e.target.value)}
                   className="w-full px-2 py-1 rounded bg-white border border-blue-200 font-mono font-bold text-blue-950"
                 />
-                <span className="text-[10px] text-slate-500 block">中建二局总部直选精锐技工</span>
+                <span className="text-[10px] text-slate-500 block">宏远国际集团总部直选精锐技工</span>
               </div>
 
               {/* 指标 2: 其他项目调派人数 */}
@@ -1447,7 +1447,7 @@ export const Attachment05LaborWorkbench: React.FC<Attachment05LaborWorkbenchProp
 
               <div className="space-y-1.5 text-slate-600 text-[11px]">
                 <strong className="text-blue-950 block">法定审查核验要求：</strong>
-                <p>1. 文件必须体现中国建筑第二工程局有限公司全称与官方公章；</p>
+                <p>1. 文件必须体现宏远国际工程集团有限公司全称与官方公章；</p>
                 <p>2. 人员名单与护照号必须与附件04管理人员及中方技工名单严格保持一致；</p>
                 <p>3. 签证批文与劳工配额需经阿尔及利亚驻华使馆或阿国劳工部盖章认可。</p>
               </div>
@@ -1466,7 +1466,7 @@ export const Attachment05LaborWorkbench: React.FC<Attachment05LaborWorkbenchProp
                 onClick={() =>
                   handleConfirmUploadProof(
                     activeProofDoc.id,
-                    `CSCEC2_${activeProofDoc.type.toUpperCase()}_Verified_${Date.now().toString().slice(-4)}.pdf`
+                    `HYI_${activeProofDoc.type.toUpperCase()}_Verified_${Date.now().toString().slice(-4)}.pdf`
                   )
                 }
                 className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold shadow-xs cursor-pointer"

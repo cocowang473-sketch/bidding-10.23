@@ -217,7 +217,7 @@ export const VariableSidebar: React.FC<VariableSidebarProps> = ({
           className="w-full py-2 px-3 text-xs font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-lg shadow-2xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-          <span>恢复阿尔及利亚 240 医院标准预设值</span>
+          <span>恢复阿尔及利亚 Phoenix 智慧医疗综合体标准预设值</span>
         </button>
       </div>
     </aside>

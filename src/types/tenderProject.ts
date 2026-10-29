@@ -8,8 +8,8 @@ export type TenderStatus = 'draft' | 'in_progress' | 'ready' | 'submitted';
 export interface TenderProject {
   id: string; // 唯一标段ID，如 "TENDER-DZ-2026-001"
   aivlProjectId?: number; // 后端 aivl 项目ID，用于调用API获取文件列表和解析结果
-  name: string; // 标段名称 (中文)，如 "阿尔及利亚 240 床综合医院强电与智能化系统工程"
-  nameFr?: string; // 标段名称 (法文)，如 "Projet Hôpital 240 Lits à Tizi Ouzou - Lot 09 Électricité CFO/CFA"
+  name: string; // 标段名称 (中文)，如 "阿尔及利亚 Phoenix 国际智慧医疗综合体机电总承包工程"
+  nameFr?: string; // 标段名称 (法文)，如 "Projet Centre Médical Phoenix - Lot 09 Électricité CFO/CFA"
   code: string; // 招标编号，如 "DZ-SANTE-2026-CFO-009"
   client: string; // 招标人/业主全称，如 "阿尔及利亚国家卫生与人口部 (Ministère de la Santé)"
   country: string; // 国家/地区，如 "阿尔及利亚 (Algérie)"

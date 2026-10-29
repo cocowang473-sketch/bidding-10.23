@@ -3,8 +3,8 @@ import type { AttachmentDefinition, ValidationItem } from '../types/instructions
 /**
  * 投标须知 9 个附件的数据
  * 基于真实的 "机电分包招标文件.zip" 中各附件的 Word 模板内容构造
- * 项目：240 床廷杜夫军方医院项目机电分包工程
- * 招标方：中建阿尔及利亚股份有限公司
+ * 项目：Phoenix 智慧医疗综合体机电分包工程
+ * 招标方：宏远国际工程海外分公司
  */
 
 export const MOCK_ATTACHMENTS: AttachmentDefinition[] = [
@@ -28,17 +28,17 @@ export const MOCK_ATTACHMENTS: AttachmentDefinition[] = [
       '若已在招标方办理授权备案，则无需提交本附件',
     ],
     fields: [
-      { key: 'company_name', label: '投标公司名称', type: 'text', value: '中建二局第三建筑工程有限公司', source: 'auto', required: true },
+      { key: 'company_name', label: '投标公司名称', type: 'text', value: '宏远国际工程第三分公司', source: 'auto', required: true },
       { key: 'legal_rep_name', label: '法定代表人姓名', type: 'text', value: '张国栋', source: 'auto', required: true },
       { key: 'legal_rep_id', label: '法人身份证号', type: 'text', value: '110105********1234', source: 'auto', required: true },
       { key: 'agent_name', label: '被授权代理人姓名', type: 'text', value: '李明辉', source: 'auto', required: true },
       { key: 'agent_id', label: '代理人身份证号', type: 'text', value: '110105********5678', source: 'auto', required: true },
       { key: 'agent_position', label: '代理人职务', type: 'text', value: '海外项目经理', source: 'auto' },
       { key: 'agent_phone', label: '代理人联系电话', type: 'text', value: '', source: 'manual', required: true },
-      { key: 'authority_scope', label: '授权权限', type: 'textarea', value: '代表投标人办理 240床廷杜夫军方医院项目机电分包工程 投标的全部事宜，包括但不限于：签署投标文件、参与开标、谈判议标、签订合同等。', source: 'auto' },
+      { key: 'authority_scope', label: '授权权限', type: 'textarea', value: '代表投标人办理 Phoenix 智慧医疗综合体机电分包工程 投标的全部事宜，包括但不限于：签署投标文件、参与开标、谈判议标、签订合同等。', source: 'auto' },
       { key: 'validity_period', label: '授权有效期', type: 'text', value: '自签署之日起至本项目合同签订之日止', source: 'auto' },
-      { key: 'project_name', label: '项目名称', type: 'text', value: '240床廷杜夫军方医院项目机电分包工程', source: 'linked', required: true },
-      { key: 'tender_authority', label: '招标方', type: 'text', value: '中建阿尔及利亚股份有限公司', source: 'linked', required: true },
+      { key: 'project_name', label: '项目名称', type: 'text', value: 'Phoenix 智慧医疗综合体机电分包工程', source: 'linked', required: true },
+      { key: 'tender_authority', label: '招标方', type: 'text', value: '宏远国际工程海外分公司', source: 'linked', required: true },
       { key: 'sign_date', label: '签署日期', type: 'date', value: '2026-11-15', source: 'auto' },
     ],
   },
@@ -65,9 +65,9 @@ export const MOCK_ATTACHMENTS: AttachmentDefinition[] = [
     ],
     fields: [
       { key: 'signatory_name', label: '签字人姓名', type: 'text', value: '李明辉', source: 'auto', required: true },
-      { key: 'company_name', label: '公司名称', type: 'text', value: '中建二局第三建筑工程有限公司', source: 'auto', required: true },
-      { key: 'tender_authority', label: '招标方', type: 'text', value: '中建阿尔及利亚股份有限公司', source: 'linked', required: true },
-      { key: 'project_name', label: '项目名称', type: 'text', value: '240床廷杜夫军方医院项目机电工程', source: 'linked', required: true },
+      { key: 'company_name', label: '公司名称', type: 'text', value: '宏远国际工程第三分公司', source: 'auto', required: true },
+      { key: 'tender_authority', label: '招标方', type: 'text', value: '宏远国际工程海外分公司', source: 'linked', required: true },
+      { key: 'project_name', label: '项目名称', type: 'text', value: 'Phoenix 智慧医疗综合体机电工程', source: 'linked', required: true },
       { key: 'total_price_lower', label: '工程总价（小写）', type: 'text', value: '12,450,000.00', source: 'linked', required: true, evidence: '来自工程量清单总价汇总' },
       { key: 'total_price_upper', label: '工程总价（大写）', type: 'text', value: '壹仟贰佰肆拾伍万元整', source: 'linked', required: true },
       { key: 'currency', label: '币种', type: 'text', value: 'DA（第纳尔）', source: 'auto', required: true },
@@ -96,7 +96,7 @@ export const MOCK_ATTACHMENTS: AttachmentDefinition[] = [
       '关键岗位：项目经理 → 总工程师 → 商务/质量/安全/HSE/采购/物资/计划 7 大负责人 → 各专业工程师',
     ],
     fields: [
-      { key: 'project_name', label: '项目名称', type: 'text', value: '240床廷杜夫军方医院项目', source: 'linked', required: true },
+      { key: 'project_name', label: '项目名称', type: 'text', value: 'Phoenix 智慧医疗综合体项目', source: 'linked', required: true },
       { key: 'project_manager', label: '项目经理', type: 'text', value: '', source: 'linked', linkedTo: '04.project_manager' },
       { key: 'tech_director', label: '总工程师', type: 'text', value: '', source: 'linked', linkedTo: '04.tech_director' },
       { key: 'commercial_lead', label: '商务负责人', type: 'text', value: '', source: 'linked', linkedTo: '04.commercial_lead' },
@@ -271,7 +271,7 @@ export const MOCK_ATTACHMENTS: AttachmentDefinition[] = [
       '需明确双方签字；未签字确认将按自动完成或默认接受',
     ],
     fields: [
-      { key: 'party_a', label: '甲方（我方）名称', type: 'text', value: '中建二局第三建筑工程有限公司', source: 'auto' },
+      { key: 'party_a', label: '甲方（我方）名称', type: 'text', value: '宏远国际工程第三分公司', source: 'auto' },
       { key: 'party_b', label: '乙方（劳务方）名称', type: 'text', value: '', source: 'manual', required: true },
       { key: 'service_scope', label: '劳务服务范围', type: 'textarea', value: '', source: 'manual', required: true },
       { key: 'material_supply', label: '甲方供料范围', type: 'textarea', value: '', source: 'manual' },
@@ -303,8 +303,8 @@ export const MOCK_ATTACHMENTS: AttachmentDefinition[] = [
       '不得泄露敏感信息（工程指标、项目细节、人员数据等）',
     ],
     fields: [
-      { key: 'project_name', label: '项目名称', type: 'text', value: '240床廷杜夫军方医院项目', source: 'linked', required: true },
-      { key: 'company_name', label: '投标公司名称', type: 'text', value: '中建二局第三建筑工程有限公司', source: 'auto', required: true },
+      { key: 'project_name', label: '项目名称', type: 'text', value: 'Phoenix 智慧医疗综合体项目', source: 'linked', required: true },
+      { key: 'company_name', label: '投标公司名称', type: 'text', value: '宏远国际工程第三分公司', source: 'auto', required: true },
       { key: 'business_type', label: '业务类型', type: 'text', value: '机电工程分包', source: 'auto' },
       { key: 'confidential_scope', label: '保密范围', type: 'textarea', value: '本投标文件及合同文件组成部分、项目图纸、工程量清单、技术方案、商务报价、人员配置等所有涉密信息', source: 'auto' },
       { key: 'confidential_period', label: '保密年限', type: 'text', value: '自签订本承诺之日起 5 年', source: 'auto' },

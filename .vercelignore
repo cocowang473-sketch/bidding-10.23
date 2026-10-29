@@ -1,0 +1,13 @@
+# 本地资料/招标原文件,不上传到 Vercel
+aivl/
+temp_bidding/
+temp_bidding2/
+dist/
+*.zip
+*.docx
+~$*
+.claude/
+bidding-main*/
+
+# node_modules 由 Vercel 自己安装
+node_modules/

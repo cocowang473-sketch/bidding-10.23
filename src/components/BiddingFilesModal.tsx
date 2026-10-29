@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { X, Folder, FileText, ChevronRight, ChevronDown, File, Loader2 } from 'lucide-react';
+import { X, Folder, FileText, ChevronRight, ChevronDown, File, Loader2, Info } from 'lucide-react';
 import { getProjectFiles, getFileContent, type BiddingFileNode } from '../utils/aivlApi';
+import { MOCK_BIDDING_FILE_TREES, getMockFileContent } from '../data/mockBiddingFiles';
 
 interface BiddingFilesModalProps {
   isOpen: boolean;
   onClose: () => void;
-  projectId: number;
+  /** 后端 aivl 项目 ID。有值时走真实 API；为 undefined 时根据 mockTenderId 使用本地模拟数据。 */
+  projectId?: number;
+  /** 模拟数据标段 ID。当没有后端 projectId 时根据此 ID 从 MOCK_BIDDING_FILE_TREES 加载文件树。 */
+  mockTenderId?: string;
   projectName: string;
 }
 
@@ -13,8 +17,10 @@ export const BiddingFilesModal: React.FC<BiddingFilesModalProps> = ({
   isOpen,
   onClose,
   projectId,
+  mockTenderId,
   projectName,
 }) => {
+  const isMockMode = !projectId && !!mockTenderId;
   const [fileTree, setFileTree] = useState<BiddingFileNode[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,12 +30,19 @@ export const BiddingFilesModal: React.FC<BiddingFilesModalProps> = ({
   const [expandedFolders, setExpandedFolders] = useState<Set<string>>(new Set());
 
   useEffect(() => {
-    if (isOpen && projectId) {
+    if (!isOpen) return;
+    if (projectId) {
       loadFiles();
+    } else if (mockTenderId) {
+      loadMockFiles(mockTenderId);
     }
-  }, [isOpen, projectId]);
+    // 切换标段时清空上一次的选择
+    setSelectedFile(null);
+    setFileContent('');
+  }, [isOpen, projectId, mockTenderId]);
 
   const loadFiles = async () => {
+    if (!projectId) return;
     setLoading(true);
     setError(null);
     try {
@@ -41,6 +54,19 @@ export const BiddingFilesModal: React.FC<BiddingFilesModalProps> = ({
     } catch (err) {
       setError(err instanceof Error ? err.message : '加载文件列表失败');
       console.error('Failed to load files:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadMockFiles = (tenderId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const files = MOCK_BIDDING_FILE_TREES[tenderId] ?? MOCK_BIDDING_FILE_TREES.__default__ ?? [];
+      setFileTree(files);
+      const firstLevel = files.filter((f) => f.type === 'directory').map((f) => f.path);
+      setExpandedFolders(new Set(firstLevel));
     } finally {
       setLoading(false);
     }
@@ -60,8 +86,14 @@ export const BiddingFilesModal: React.FC<BiddingFilesModalProps> = ({
     setSelectedFile({ path, name });
     setContentLoading(true);
     try {
-      const content = await getFileContent(projectId, path);
-      setFileContent(content);
+      if (projectId) {
+        const content = await getFileContent(projectId, path);
+        setFileContent(content);
+      } else if (mockTenderId) {
+        // 轻微延迟,模拟异步加载体验
+        await new Promise((r) => setTimeout(r, 120));
+        setFileContent(getMockFileContent(mockTenderId, path));
+      }
     } catch (err) {
       setFileContent('无法加载文件内容：' + (err instanceof Error ? err.message : '未知错误'));
     } finally {
@@ -150,6 +182,16 @@ export const BiddingFilesModal: React.FC<BiddingFilesModalProps> = ({
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {isMockMode && (
+          <div className="px-6 py-2.5 bg-amber-50 border-b border-amber-200 flex items-start gap-2">
+            <Info className="w-4 h-4 text-amber-600 mt-0.5 shrink-0" />
+            <p className="text-xs text-amber-800 leading-relaxed">
+              此标段为演示数据，未关联后端 aivl 项目。以下文件树与内容均为模拟示例，仅用于预览界面效果。
+              若需查看真实招标原件，请使用「新建标段 (上传ZIP/立项)」上传招标包。
+            </p>
+          </div>
+        )}
 
         {/* 内容区域 */}
         <div className="flex-1 flex overflow-hidden">

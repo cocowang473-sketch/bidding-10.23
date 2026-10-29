@@ -77,7 +77,7 @@ export const LaborBaseConfirmModal: React.FC<LaborBaseConfirmModalProps> = ({
                 <div className="text-lg font-bold text-slate-900 mt-1 font-mono tabular-nums">
                   6,500 <span className="text-xs font-normal text-slate-500">DZD</span>
                 </div>
-                <span className="text-xs text-slate-400 mt-0.5 block">240 医院项目基准值</span>
+                <span className="text-xs text-slate-400 mt-0.5 block">Phoenix 智慧医疗综合体项目基准值</span>
               </button>
 
               <button

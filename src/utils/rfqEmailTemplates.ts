@@ -20,11 +20,11 @@ export interface PresetVariableDef {
 export const PRESET_EMAIL_VARIABLES: PresetVariableDef[] = [
   { label: '供应商名称', variable: '{{供应商名称}}', desc: '收件供应商企业全称', example: '施耐德电气 (Schneider Electric)' },
   { label: '询价材料清单', variable: '{{询价材料清单}}', desc: '物资名称、规格、数量与单位', example: '接地裸铜绞线 50mm² (规格: 国标/IEC 50mm²，数量: 260 米)' },
-  { label: '项目名称', variable: '{{项目名称}}', desc: '当前工程项目标段全称', example: '阿尔及利亚 240 床综合医院标段' },
+  { label: '项目名称', variable: '{{项目名称}}', desc: '当前工程项目标段全称', example: '阿尔及利亚 Phoenix 智慧医疗综合体标段' },
   { label: '报价截止日期', variable: '{{报价截止日期}}', desc: '报价回函最后有效期限', example: '2026-08-20' },
   { label: '交货地点与条款', variable: '{{交货地点与条款}}', desc: '交货港口与贸易术语 (如 CIF/DAP)', example: 'CIF 阿尔及尔港 (Port d’Alger)' },
   { label: '技术标准规范', variable: '{{技术标准规范}}', desc: '工程适用设计标准规范', example: 'IEC 61439-2 / 法规 NFC-15100' },
-  { label: '采购单位名称', variable: '{{采购单位名称}}', desc: '中建二局海外工程采购部', example: '中国建筑第二工程局有限公司 (CSCEC-II) 海外工程事业部' },
+  { label: '采购单位名称', variable: '{{采购单位名称}}', desc: '宏远国际工程集团海外采购部', example: '宏远国际工程集团有限公司 (HYI Group) 海外工程事业部' },
   { label: '联系人及电话', variable: '{{联系人及电话}}', desc: '造价采购工程师联络方式', example: '李工 (+86-10-6789-8800 / procurement.dz@cscec2.com.cn)' },
   { label: '期望报价币种', variable: '{{期望报价币种}}', desc: '结算币种', example: 'EUR' },
 ];
@@ -208,11 +208,11 @@ export function renderTemplateWithVariables(
   const {
     supplierName = '供应商合作伙伴',
     materialList = '工程量清单指定材料设备',
-    projectName = '中建二局海外 240 床综合医院标段',
+    projectName = '宏远国际海外 Phoenix 智慧医疗综合体标段',
     deadlineDate = '2026-08-20',
     deliveryPort = 'CIF 阿尔及尔港 (Port d’Alger)',
     techStandard = 'IEC 61439-2 / 法国标准 NFC 15-100',
-    buyerName = '中国建筑第二工程局有限公司 (CSCEC-II) 海外工程事业部',
+    buyerName = '宏远国际工程集团有限公司 (HYI Group) 海外工程事业部',
     contactInfo = '李工 (+86-10-6789-8800 / procurement.dz@cscec2.com.cn)',
     currency = 'EUR',
   } = variables;
@@ -320,7 +320,7 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
     unit,
     deliveryPort,
     deadlineDate,
-    projectName = '中建二局海外 240 床综合医院标段',
+    projectName = '宏远国际海外 Phoenix 智慧医疗综合体标段',
     currency = 'EUR',
     customTemplate,
   } = params;
@@ -340,7 +340,7 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
       deadlineDate,
       deliveryPort,
       techStandard: 'IEC 61439-2 / 法国标准 NFC 15-100',
-      buyerName: '中国建筑第二工程局有限公司 (CSCEC-II) 海外工程事业部',
+      buyerName: '宏远国际工程集团有限公司 (HYI Group) 海外工程事业部',
       contactInfo: '李工 (+86-10-6789-8800 / procurement.dz@cscec2.com.cn)',
       currency: currency || matchedTemplate.defaultCurrency,
     });
@@ -352,14 +352,14 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
       deadlineDate,
       deliveryPort,
       techStandard: 'IEC 61439-2 / 法国标准 NFC 15-100',
-      buyerName: '中国建筑第二工程局有限公司 (CSCEC-II) 海外工程事业部',
+      buyerName: '宏远国际工程集团有限公司 (HYI Group) 海外工程事业部',
       contactInfo: '李工 (+86-10-6789-8800 / procurement.dz@cscec2.com.cn)',
       currency: currency || matchedTemplate.defaultCurrency,
     });
 
     const greetingLine = renderedBody.split('\n')[0] || `致：${supplierName} 商务团队：`;
     const closing = '顺祝商祺！\nSalutations distinguées / Best regards,';
-    const signature = `中国建筑第二工程局有限公司 (CSCEC-II)
+    const signature = `宏远国际工程集团有限公司 (HYI Group)
 海外工程事业部 招标采购与供应链管理中心
 项目执行单位：${projectName} 项目部机电物资采购组
 官方采购邮箱: procurement.dz@cscec2.com.cn
@@ -379,7 +379,7 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
   let greeting = '';
   let bodyLines: string[] = [];
   const closing = '顺祝商祺！\nSalutations distinguées / Best regards,';
-  const signature = `中国建筑第二工程局有限公司 (CSCEC-II)
+  const signature = `宏远国际工程集团有限公司 (HYI Group)
 海外工程事业部 招标采购与供应链管理中心
 项目执行单位：${projectName} 项目部机电物资采购组
 官方采购邮箱: procurement.dz@cscec2.com.cn
@@ -391,7 +391,7 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
       greeting = `致：${supplierName} 海外工程与外贸事业部负责人：`;
       bodyLines = [
         `您好！`,
-        `我司（中国建筑第二工程局有限公司）现承建北非重点标杆工程——“${projectName}”。经项目评标委员会审议，贵司在电气与机电设备制造领域具备优秀的制造履约实力，现正式邀请贵司就本工程所需关键物资参与竞争性比选报价。`,
+        `我司（宏远国际工程集团有限公司）现承建北非重点标杆工程——“${projectName}”。经项目评标委员会审议，贵司在电气与机电设备制造领域具备优秀的制造履约实力，现正式邀请贵司就本工程所需关键物资参与竞争性比选报价。`,
         ``,
         `一、 采购标的物与技术标准要求：`,
         `1. 采购物资名称：${materialName}`,
@@ -417,7 +417,7 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
       greeting = `À l'attention de la Direction Commerciale & Grands Projets, ${supplierName} :`;
       bodyLines = [
         `Messieurs,`,
-        `Dans le cadre de la réalisation du Projet Hôpital 240 Lits en Algérie, entreprise générale CSCEC-II (China State Construction Engineering Corp.), nous avons le plaisir de vous consulter pour la fourniture des équipements électriques ci-après :`,
+        `Dans le cadre de la réalisation du Projet Centre Médical Phoenix en Algérie, entreprise générale HYI Group (Hongyuan International Engineering Group), nous avons le plaisir de vous consulter pour la fourniture des équipements électriques ci-après :`,
         ``,
         `1. Désignation du Matériel : ${materialName}`,
         `2. Spécifications Techniques : ${materialSpec}`,
@@ -438,11 +438,11 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
       break;
 
     case 'local_algeria':
-      subject = `[Consultation Commerciale Locale / Projet 240 Lits] Demande de Prix pour 【${materialName}】 (Destinataire: ${supplierName})`;
+      subject = `[Consultation Commerciale Locale / Projet Phoenix] Demande de Prix pour 【${materialName}】 (Destinataire: ${supplierName})`;
       greeting = `À l'attention du Service Marchés & Ventes Entreprises, ${supplierName} Algérie :`;
       bodyLines = [
         `Madame, Monsieur,`,
-        `Le Bureau de Projet CSCEC-II Algérie (Projet Hôpital 240 Lits) sollicite par la présente votre meilleure proposition commerciale pour la fourniture locale de :`,
+        `Le Bureau de Projet HYI Group Algérie (Projet Centre Médical Phoenix) sollicite par la présente votre meilleure proposition commerciale pour la fourniture locale de :`,
         ``,
         `1. Désignation : ${materialName}`,
         `2. Spécification & Référence : ${materialSpec}`,
@@ -464,7 +464,7 @@ export function generateDedicatedSupplierEmail(params: GenerateEmailParams): Ded
       greeting = `致：${supplierName} 商务拓展团队 / Dear Bidding Team :`;
       bodyLines = [
         `您好！`,
-        `中国建筑第二工程局有限公司（CSCEC-II）现就海外大型综合医疗工程“${projectName}”，向贵公司发出正式询价邀请：`,
+        `宏远国际工程集团有限公司（HYI Group）现就海外大型综合医疗工程“${projectName}”，向贵公司发出正式询价邀请：`,
         ``,
         `1. 采购物资品名：${materialName}`,
         `2. 规格技术要求：${materialSpec}`,
@@ -523,8 +523,8 @@ export const REPLY_OPTIONS: GeneratedReplyOption[] = [
     badge: '推荐中选',
     description: '确认采纳该供应商报价，通知其入选并邀请提交合同草案、企业资质及银行账户信息。',
     generateSubject: (matName, supName) =>
-      `Re: [报价采纳与合同洽谈邀请] 阿尔及利亚 240 医院项目关于【${matName}】的采购确认函 (致 ${supName})`,
-    generateBody: ({ materialName, supplierName, quotedPrice, currency, unit, quantity, leadTime, projectName = '中建二局海外 240 医院项目' }) =>
+      `Re: [报价采纳与合同洽谈邀请] 阿尔及利亚 Phoenix 智慧医疗综合体项目关于【${matName}】的采购确认函 (致 ${supName})`,
+    generateBody: ({ materialName, supplierName, quotedPrice, currency, unit, quantity, leadTime, projectName = '宏远国际海外 Phoenix 智慧医疗综合体项目' }) =>
       `致：${supplierName} 商务与签约管理团队：
 
 您好！
@@ -542,7 +542,7 @@ export const REPLY_OPTIONS: GeneratedReplyOption[] = [
 我司项目法务与采购工程师将与贵司对接具体条款。期待与贵司携手打造优质国际样板工程！
 
 顺祝商祺！
-中国建筑第二工程局有限公司 (CSCEC-II)
+宏远国际工程集团有限公司 (HYI Group)
 海外工程事业部 招标采购供应链管理中心
 联系电话: +86-10-6789-8800 / procurement.dz@cscec2.com.cn`,
   },
@@ -553,7 +553,7 @@ export const REPLY_OPTIONS: GeneratedReplyOption[] = [
     description: '感谢报价但指出受业主投资总控约束，结合大批量采购规模商请 3%-5% 专项优惠折扣。',
     generateSubject: (matName, supName) =>
       `Re: [商务优化与二次商洽函] 关于【${matName}】采购单价商洽备忘录 (致 ${supName})`,
-    generateBody: ({ materialName, supplierName, quotedPrice, currency, unit, quantity, projectName = '中建二局海外 240 医院项目' }) =>
+    generateBody: ({ materialName, supplierName, quotedPrice, currency, unit, quantity, projectName = '宏远国际海外 Phoenix 智慧医疗综合体项目' }) =>
       `致：${supplierName} 商务拓展及大客户营销部：
 
 您好！
@@ -569,7 +569,7 @@ export const REPLY_OPTIONS: GeneratedReplyOption[] = [
 如贵司能于 48 小时内反馈最终优惠方案，我司将优先把贵司列为最终决标候选人！
 
 顺祝商祺！
-中国建筑第二工程局有限公司 (CSCEC-II)
+宏远国际工程集团有限公司 (HYI Group)
 海外工程事业部 成本控制与商务部
 联系电话: +86-10-6789-8800 / procurement.dz@cscec2.com.cn`,
   },
@@ -580,7 +580,7 @@ export const REPLY_OPTIONS: GeneratedReplyOption[] = [
     description: '针对工程图样与法标认证要求，请供应商技术人员限期补充型式试验报告与海运包装方案。',
     generateSubject: (matName, supName) =>
       `Re: [技术澄清与标准核对函] 关于【${matName}】工程技术图样与型式试验补充澄清 (致 ${supName})`,
-    generateBody: ({ materialName, supplierName, projectName = '中建二局海外 240 医院项目' }) =>
+    generateBody: ({ materialName, supplierName, projectName = '宏远国际海外 Phoenix 智慧医疗综合体项目' }) =>
       `致：${supplierName} 技术支持部与质量保障中心：
 
 您好！
@@ -594,7 +594,7 @@ export const REPLY_OPTIONS: GeneratedReplyOption[] = [
 请贵司于 3 个工作日内将盖章的技术澄清说明及技术资料扫描件回传。感谢贵司的专业配合！
 
 顺祝商祺！
-中国建筑第二工程局有限公司 (CSCEC-II)
+宏远国际工程集团有限公司 (HYI Group)
 海外工程事业部 机电技术与深化设计组
 技术联系邮箱: tech.dz@cscec2.com.cn`,
   },

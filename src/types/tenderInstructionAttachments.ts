@@ -128,7 +128,7 @@ export interface PersonnelItem {
   tenureYears: number; // 任职年限
   // 核心核查 4 大规则：
   hasHospitalExp: boolean; // 医院项目经验
-  sameOrLargerHospitalScale?: string; // 同等或更大规模项目经验 (e.g. >=240床)
+  sameOrLargerHospitalScale?: string; // 同等或更大规模项目经验 (e.g. >=200床)
   hospitalExpNote?: string;
   hasAlgeriaExp: boolean; // 阿尔及利亚工作经验
   algeriaExpYears?: number;
@@ -482,7 +482,7 @@ export const INITIAL_ATTACHMENT_01: Attachment01Data = {
   filingStatus: 'unregistered', // 默认状态：未在招标方备案，需自动生成并提交
   legalRepresentative: {
     name: '石雨',
-    company: '中国建筑第二工程局有限公司 (CSCEC-II)',
+    company: '宏远国际工程集团有限公司 (HYI Group)',
     title: '法定代表人 / 董事长',
   },
   authorizedAgent: {
@@ -496,7 +496,7 @@ export const INITIAL_ATTACHMENT_01: Attachment01Data = {
     signDate: '2025-03-20',
   },
   clientName: '阿尔及利亚国家卫生与人口部 (Ministère de la Santé)',
-  projectName: '240床廷杜夫军方医院项目',
+  projectName: 'Phoenix 智慧医疗综合体项目',
   supplementaryDocs: [
     { name: '代理人身份证原件正反面复印件 (加盖公章)', required: true, status: 'uploaded' },
     { name: '法定代表人身份证明书原件', required: true, status: 'uploaded' },
@@ -507,10 +507,10 @@ export const INITIAL_ATTACHMENT_01: Attachment01Data = {
 };
 
 export const INITIAL_ATTACHMENT_02: Attachment02Data = {
-  projectName: '240床廷杜夫军方医院项目',
+  projectName: 'Phoenix 智慧医疗综合体项目',
   engineeringName: '机电工程 (Lot N° 09 : Électricité CFO/CFA)',
   clientName: '阿尔及利亚国家卫生与人口部',
-  bidderCompanyName: '中国建筑第二工程局有限公司',
+  bidderCompanyName: '宏远国际工程集团有限公司',
   signatoryName: '张志强 (全权代表)',
   totalPriceNumeric: 1286450000.0,
   totalPriceFormatted: '1,286,450,000.00 DZD',
@@ -518,7 +518,7 @@ export const INITIAL_ATTACHMENT_02: Attachment02Data = {
   currency: '阿尔及利亚第纳尔（DA / DZD）',
   signDate: '2025-03-21',
   siteVisitConfirmation: 'confirmed_visited', // 已完成现场踏勘与技术核查
-  siteVisitNotes: '已由提济乌祖常驻技术团队于 2025年2月18日完成现场踏勘并签署回执备查。',
+  siteVisitNotes: '已由阿尔及尔北部常驻技术团队于 2025年2月18日完成现场踏勘并签署回执备查。',
   amountConsistencyChecks: {
     numberMatchesWords: true,
     matchesBoqTotal: true,
@@ -561,7 +561,7 @@ export const ENTERPRISE_TALENT_POOL: PersonnelItem[] = [
     currentPosition: '机电项目经理',
     tenureYears: 16,
     hasHospitalExp: true,
-    sameOrLargerHospitalScale: '康斯坦丁300床大学教学医院机电总承包 (规模达300床，超本项目240床要求)',
+    sameOrLargerHospitalScale: '康斯坦丁300床大学教学医院机电总承包 (规模达300床，超本项目200床要求)',
     hospitalExpNote: '曾任阿尔及利亚康斯坦丁 300 床大学教学医院机电总承包项目经理 (规模超过本项目)',
     hasAlgeriaExp: true,
     algeriaExpYears: 11,
@@ -691,7 +691,7 @@ export const ENTERPRISE_TALENT_POOL: PersonnelItem[] = [
     workingYears: 15,
     nationality: '阿尔及利亚 (当地高级工程师)',
     currentCountry: '阿尔及利亚',
-    currentProject: '提济乌祖省工程协会注册工程师',
+    currentProject: '阿尔及尔北部工程协会注册工程师',
     tenureYears: 8,
     hasHospitalExp: true,
     hospitalExpNote: '熟悉医院施工期粉尘隔离、医用气体安全防爆规程',
@@ -719,7 +719,7 @@ export const ENTERPRISE_TALENT_POOL: PersonnelItem[] = [
     workingYears: 18,
     nationality: '中国',
     currentCountry: '阿尔及利亚',
-    currentProject: '提济乌祖大学附属医院机电深化组',
+    currentProject: '阿尔及尔北部大学附属医院机电深化组',
     tenureYears: 12,
     hasHospitalExp: true,
     hospitalExpNote: '主持2所北非大型综合医院全套BIM管综深化设计与法标防烟排风校核',
@@ -803,7 +803,7 @@ export const ENTERPRISE_TALENT_POOL: PersonnelItem[] = [
     workingYears: 12,
     nationality: '中国',
     currentCountry: '阿尔及利亚',
-    currentProject: '提济乌祖在建基础设施项目',
+    currentProject: '阿尔及尔北部在建基础设施项目',
     tenureYears: 8,
     hasHospitalExp: true,
     hospitalExpNote: '编审3所海外三甲医院一级至五级P6进度计划与关键路径动态分析',
@@ -1000,7 +1000,7 @@ export const INITIAL_ATTACHMENT_05_LABOR: LaborPlanData = {
     directHired: 45, // 属地直接招募人数 (技术小工与普工)
     subcontracted: 54, // 属地分包班组人数 (具有阿国资质电气安装队)
     algerianForemenCount: 6, // 阿尔及利亚当地工长人数 (中法双语带班)
-    laborBureauFilingNo: 'DZ-WILAYA-TIZI-EMP-2025-0448', // 阿国劳工局合规备案号
+    laborBureauFilingNo: 'DZ-WILAYA-ALGN-EMP-2025-0448', // 阿国劳工局合规备案号
     localInsuranceCoverageRate: 100, // 属地工伤与社保合规覆盖率 100%
   },
   proofDocuments: [
@@ -1008,7 +1008,7 @@ export const INITIAL_ATTACHMENT_05_LABOR: LaborPlanData = {
       id: 'doc-pass-01',
       type: 'passport',
       typeName: '中国工人护照全套扫描证明',
-      fileName: 'CSCEC2_Algeria_66_Passports_BatchScan.pdf',
+      fileName: 'HYI_Algeria_66_Passports_BatchScan.pdf',
       fileSize: '42.8 MB',
       uploadDate: '2025-03-12',
       associatedCount: 66,
@@ -1040,8 +1040,8 @@ export const INITIAL_ATTACHMENT_05_LABOR: LaborPlanData = {
     {
       id: 'doc-dispatch-01',
       type: 'dispatch',
-      typeName: '中建二局总部派驻公函与内部跨项目调派证明',
-      fileName: 'HQ_Dispatch_Official_Notice_CSCEC_2025_089.pdf',
+      typeName: '集团总部派驻公函与内部跨项目调派证明',
+      fileName: 'HQ_Dispatch_Official_Notice_HYI_2025_089.pdf',
       fileSize: '6.4 MB',
       uploadDate: '2025-03-19',
       associatedCount: 66,
@@ -1150,7 +1150,7 @@ export const INITIAL_ATTACHMENT_06_EQUIPMENT: EquipmentItem[] = [
     ageYears: 3,
     quantity: 2,
     unit: '台',
-    currentLocation: '阿尔及利亚提济乌祖省当地仓储',
+    currentLocation: '阿尔及利亚阿尔及尔北部当地仓储',
     planEntryDate: '2025-04-15',
     associatedProcedure: '现场施工临时供电保障与夜间作业',
     procedureStartDate: '2025-04-20',
@@ -1348,7 +1348,7 @@ export const INITIAL_ATTACHMENT_07_WBS: WbsTaskDraft[] = [
 
 export const INITIAL_ATTACHMENT_08_LEGAL: Attachment08LegalCheck = {
   partyA: '阿尔及利亚国家卫生与人口部项目指挥部',
-  partyB: '中国建筑第二工程局有限公司',
+  partyB: '宏远国际工程集团有限公司',
   unifiedSocialCode: '91110000101123456X',
   legalRep: '石雨',
   authorizedPerson: '张志强',
@@ -1369,9 +1369,9 @@ export const INITIAL_ATTACHMENT_08_LEGAL: Attachment08LegalCheck = {
 };
 
 export const INITIAL_ATTACHMENT_09_CONFIDENTIAL: Attachment09Data = {
-  projectName: '240床廷杜夫军方医院项目',
+  projectName: 'Phoenix 智慧医疗综合体项目',
   engineeringName: '机电工程',
-  bidderName: '中国建筑第二工程局有限公司',
+  bidderName: '宏远国际工程集团有限公司',
   legalRepName: '石雨',
   signatoryName: '张志强',
   signDate: '2025-03-21',

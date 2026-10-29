@@ -311,7 +311,7 @@ export const BoqPricingWorkbench: React.FC<BoqPricingWorkbenchProps> = ({
             <RefreshCw className="w-4 h-4 animate-spin" />
             <span className="font-medium">{matchingStepMessage}</span>
           </div>
-          <span className="opacity-80">依据“240 医院项目”定额库 & 材料库检索中</span>
+          <span className="opacity-80">依据“Phoenix 智慧医疗综合体项目”定额库 & 材料库检索中</span>
         </div>
       )}
 

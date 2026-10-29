@@ -167,21 +167,29 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
       <div className="h-16 border-b border-slate-800/80 px-4 flex items-center justify-between bg-slate-900/50">
         {!isCollapsed ? (
           <div className="flex items-center gap-3 overflow-hidden">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg shrink-0 ring-1 ring-blue-400/20">
-              CS
+            <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-lg shrink-0 ring-1 ring-blue-400/20 overflow-hidden">
+              <img
+                src="/iflytek.png"
+                alt="iFlytek Logo"
+                className="w-full h-full object-contain"
+              />
             </div>
             <div className="truncate">
               <div className="flex items-center gap-1.5">
                 <span className="font-bold text-white text-sm tracking-tight truncate">
-                  中建二局 · CostOS
+                  BidCraft · 招投标智能协同平台
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400 truncate">海外工程智能造价与供应链协同平台</p>
+              <p className="text-[11px] text-slate-400 truncate">招投标智能造价与供应链协同平台</p>
             </div>
           </div>
         ) : (
-          <div className="mx-auto w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm shadow-lg ring-1 ring-blue-400/20">
-            CS
+          <div className="mx-auto w-9 h-9 rounded-lg bg-white flex items-center justify-center shadow-lg ring-1 ring-blue-400/20 overflow-hidden">
+            <img
+              src="/iflytek.png"
+              alt="iFlytek Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
         )}
       </div>

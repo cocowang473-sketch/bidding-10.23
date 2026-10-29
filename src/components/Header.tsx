@@ -92,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-sm sm:text-base font-bold text-slate-900 tracking-tight whitespace-nowrap">
-                  海外工程智能造价与供应链协同平台
+                  招投标智能造价与供应链协同平台
                 </span>
               </div>
 
@@ -115,7 +115,7 @@ export const Header: React.FC<HeaderProps> = ({
                     {currentProjectName}
                   </span>
                   <span>·</span>
-                  <span>CFO 强电工程商务标组价工作区</span>
+                  <span>商务标组价工作区</span>
                 </div>
               ) : null}
             </div>

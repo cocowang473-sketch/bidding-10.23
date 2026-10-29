@@ -182,11 +182,11 @@ export const EmailTemplateManagerView: React.FC<EmailTemplateManagerViewProps> =
   const previewRenderedBody = renderTemplateWithVariables(editBody, {
     supplierName: '法国施耐德电气海外工程部 (Schneider Electric)',
     materialList: '【低压动力配电箱 TGBT 2500A】(规格: 400V 50kA IP54，需求数量: 2 台)',
-    projectName: '阿尔及利亚 240 床综合医院标段',
+    projectName: '阿尔及利亚 Phoenix 智慧医疗综合体标段',
     deadlineDate: '2026-08-20',
     deliveryPort: 'CIF 阿尔及尔港 (Port d’Alger)',
     techStandard: 'IEC 61439-2 / 法国标准 NFC 15-100',
-    buyerName: '中国建筑第二工程局有限公司 (CSCEC-II) 海外工程事业部',
+    buyerName: '宏远国际工程集团有限公司 (HYI Group) 海外工程事业部',
     contactInfo: '李工 (+86-10-6789-8800 / procurement.dz@cscec2.com.cn)',
     currency: editCurrency,
   });
@@ -194,11 +194,11 @@ export const EmailTemplateManagerView: React.FC<EmailTemplateManagerViewProps> =
   const previewRenderedSubject = renderTemplateWithVariables(editSubject, {
     supplierName: '法国施耐德电气 (Schneider Electric)',
     materialList: '低压动力配电箱 TGBT 2500A',
-    projectName: '阿尔及利亚 240 床综合医院标段',
+    projectName: '阿尔及利亚 Phoenix 智慧医疗综合体标段',
     deadlineDate: '2026-08-20',
     deliveryPort: 'CIF 阿尔及尔港',
     techStandard: 'IEC 61439-2',
-    buyerName: '中建二局海外项目部',
+    buyerName: '宏远国际工程集团海外项目部',
     contactInfo: '李工',
     currency: editCurrency,
   });

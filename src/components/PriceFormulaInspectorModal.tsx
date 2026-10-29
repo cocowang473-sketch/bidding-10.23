@@ -290,7 +290,7 @@ export const PriceFormulaInspectorModal: React.FC<PriceFormulaInspectorModalProp
                 <div className="pt-1.5 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-slate-400 text-[10px]">溯源依据:</span>
                   <span className="text-blue-700 font-medium text-[11px] flex items-center gap-1">
-                    阿尔及利亚 240 床综合医院标段历史合同 / 供应商回函
+                    阿尔及利亚 Phoenix 智慧医疗综合体标段历史合同 / 供应商回函
                   </span>
                 </div>
               </div>

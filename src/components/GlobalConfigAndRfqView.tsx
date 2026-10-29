@@ -62,7 +62,7 @@ export const GlobalConfigAndRfqView: React.FC<GlobalConfigAndRfqViewProps> = ({
 
     const newRecord: RfqInquiryRecord = {
       id: `RFQ-${Date.now().toString().slice(-4)}`,
-      inquiryNo: `RFQ-CSCEC2-${Date.now().toString().slice(-4)}`,
+      inquiryNo: `RFQ-HYI-${Date.now().toString().slice(-4)}`,
       materialName: rfqMaterialName,
       materialSpec: rfqMaterialSpec || '按图纸技术参数执行',
       quantityNeeded: rfqQuantity,
@@ -461,7 +461,7 @@ export const GlobalConfigAndRfqView: React.FC<GlobalConfigAndRfqViewProps> = ({
               <span className="text-slate-500 block">渠道 2 (优先)</span>
               <h4 className="font-bold text-slate-900 mt-0.5">历史项目数据</h4>
               <p className="text-slate-500 text-[11px] mt-1">
-                以 240 医院项目等 1 年内签单历史作为第一优先匹配依据。
+                以 Phoenix 智慧医疗综合体项目等 1 年内签单历史作为第一优先匹配依据。
               </p>
             </div>
 
@@ -581,7 +581,7 @@ export const GlobalConfigAndRfqView: React.FC<GlobalConfigAndRfqViewProps> = ({
                           <div className="mt-2.5 flex items-center justify-end gap-2">
                             {rfq.isAdoptedToHistoryDb ? (
                               <span className="text-[11px] text-emerald-700 font-semibold flex items-center gap-1">
-                                <Check className="w-3.5 h-3.5" /> 已写入 240 医院历史材料库
+                                <Check className="w-3.5 h-3.5" /> 已写入 Phoenix 项目历史材料库
                               </span>
                             ) : (
                               <button

@@ -405,7 +405,7 @@ export default function App() {
     logChange({
       actionType: 'variable',
       title: '重置标书全案变量至系统预设值',
-      description: '恢复阿尔及利亚 240 床综合医院示范标段基准条款与合同变量。',
+      description: '恢复阿尔及利亚 Phoenix 智慧医疗综合体示范标段基准条款与合同变量。',
       target: '全案商务标变量库',
       operator: '当前商务造价师',
     });
@@ -581,7 +581,7 @@ export default function App() {
           notes: '经过造价工程师多商比选人工审核确认采纳入库',
         },
       ],
-      lastSignedProject: '240 医院项目 (询价决标采纳)',
+      lastSignedProject: 'Phoenix 智慧医疗综合体项目 (询价决标采纳)',
       lastSignedDate: new Date().toISOString().split('T')[0],
       isRecentOneYear: true,
       category: '电缆母线',
@@ -593,7 +593,7 @@ export default function App() {
     const newContract: HistoricalContractRecord = {
       id: `HC-${Date.now().toString().slice(-4)}`,
       contractNo: `HT-RFQ-2026-${Date.now().toString().slice(-3)}`,
-      projectName: '阿尔及利亚 240 床综合医院标段',
+      projectName: '阿尔及利亚 Phoenix 智慧医疗综合体标段',
       materialName: rfq.materialName,
       materialSpec: rfq.materialSpec,
       category: '电缆母线',

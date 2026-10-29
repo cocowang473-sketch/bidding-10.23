@@ -44,13 +44,9 @@ export const TenderProjectsHubView: React.FC<TenderProjectsHubViewProps> = ({
 
   const handleOpenFilesModal = (tender: TenderProject, e: React.MouseEvent) => {
     e.stopPropagation();
-
-    // 检查是否有后端项目ID
-    if (!tender.aivlProjectId) {
-      alert('此标段没有关联的后端项目，无法查看文件详情。可能是使用模拟数据创建的项目。');
-      return;
-    }
-
+    // 无论是否关联后端项目都允许打开:
+    //   - 有 aivlProjectId: 走真实后端 API
+    //   - 无 aivlProjectId: 根据 tender.id 回退到 MOCK_BIDDING_FILE_TREES 中的模拟文件树
     setSelectedTenderForFiles(tender);
     setFilesModalOpen(true);
   };
@@ -354,12 +350,13 @@ export const TenderProjectsHubView: React.FC<TenderProjectsHubViewProps> = ({
         })}
       </div>
 
-      {/* 招标文件详情弹窗 */}
-      {selectedTenderForFiles && selectedTenderForFiles.aivlProjectId && (
+      {/* 招标文件详情弹窗 (支持真实后端项目 + 模拟数据回退) */}
+      {selectedTenderForFiles && (
         <BiddingFilesModal
           isOpen={filesModalOpen}
           onClose={handleCloseFilesModal}
           projectId={selectedTenderForFiles.aivlProjectId}
+          mockTenderId={selectedTenderForFiles.id}
           projectName={selectedTenderForFiles.name}
         />
       )}

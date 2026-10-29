@@ -240,7 +240,7 @@ export const StructuredTenderExtractionMatrix: React.FC<
   // 导出结构化表单报告
   const handleExportMatrixReport = () => {
     const reportData = {
-      title: '阿尔及利亚240床医院项目 - 招标文件八大板块结构化提取表单清单',
+      title: '阿尔及利亚Phoenix智慧医疗综合体项目 - 招标文件八大板块结构化提取表单清单',
       exportedAt: new Date().toLocaleString('zh-CN'),
       summary: stats,
       activeCategory: activeCategoryMeta,

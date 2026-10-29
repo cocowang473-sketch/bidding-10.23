@@ -1970,7 +1970,7 @@ Date : [签署日期]`;
                 <div className="p-2.5 rounded-lg bg-blue-50/50 border border-blue-200">
                   <strong className="text-blue-950 block text-[11px]">1. 自动去除工程标识</strong>
                   <span className="text-slate-600 text-[10px] mt-0.5 block">
-                    清除医院名称、业主抬头与廷杜夫地理定位。
+                    清除医院名称、业主抬头与北部沿海地理定位。
                   </span>
                 </div>
                 <div className="p-2.5 rounded-lg bg-blue-50/50 border border-blue-200">
@@ -2384,7 +2384,7 @@ Date : [签署日期]`;
                     1. 项目名称、招标方名称、投标人名称一致性
                   </strong>
                   <span className="text-slate-600 text-[11px]">
-                    附件01、02、08、09 涉及的 3 项核心主体全称完全相同（240床廷杜夫军方医院项目 / 中国建筑第二工程局有限公司）。
+                    附件01、02、08、09 涉及的 3 项核心主体全称完全相同（Phoenix 智慧医疗综合体项目 / 宏远国际工程集团有限公司）。
                   </span>
                 </div>
               </div>
@@ -2500,7 +2500,7 @@ Date : [签署日期]`;
               <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-200 space-y-1">
                 <span className="font-bold text-blue-950 block">脱敏前后关键字段比对审计</span>
                 <p className="text-[11px] text-slate-600 leading-relaxed">
-                  系统已自动剥离原工程名称【240床廷杜夫军方医院】、业主名称【阿尔及利亚国防部/卫生部】与地理坐标，防止询价过程中泄露招标文件保密信息。
+                  系统已自动剥离原工程名称【Phoenix 智慧医疗综合体】、业主名称【阿尔及利亚国防部/卫生部】与地理坐标，防止询价过程中泄露招标文件保密信息。
                 </p>
               </div>
 
@@ -2517,7 +2517,7 @@ Date : [签署日期]`;
                   <tbody className="divide-y divide-blue-100">
                     <tr>
                       <td className="p-2.5 font-bold text-blue-950">工程名称</td>
-                      <td className="p-2.5 text-slate-400 line-through">240床廷杜夫军方医院项目</td>
+                      <td className="p-2.5 text-slate-400 line-through">Phoenix 智慧医疗综合体项目</td>
                       <td className="p-2.5 text-blue-900 font-semibold">阿尔及利亚公共建筑电气Lot09工程</td>
                       <td className="p-2.5 text-center text-blue-700 font-bold">已脱敏</td>
                     </tr>
@@ -2529,7 +2529,7 @@ Date : [签署日期]`;
                     </tr>
                     <tr>
                       <td className="p-2.5 font-bold text-blue-950">工程地点</td>
-                      <td className="p-2.5 text-slate-400 line-through">廷杜夫省某军区特区</td>
+                      <td className="p-2.5 text-slate-400 line-through">北部沿海省某军区特区</td>
                       <td className="p-2.5 text-blue-900 font-semibold">阿尔及利亚西部大区 (港口交付 DDP)</td>
                       <td className="p-2.5 text-center text-blue-700 font-bold">已泛化</td>
                     </tr>
@@ -2588,7 +2588,7 @@ Date : [签署日期]`;
                     </span>
                   </div>
                   <p className="text-xs text-blue-200 mt-0.5">
-                    基于《投标须知》重点核查：同等或更大体量医院项目经验（≥240床）、阿尔及利亚常驻经历、是否需要面试与承诺出席
+                    基于《投标须知》重点核查：同等或更大体量医院项目经验（≥Phoenix项目规模）、阿尔及利亚常驻经历、是否需要面试与承诺出席
                   </p>
                 </div>
               </div>
@@ -2717,7 +2717,7 @@ Date : [签署日期]`;
                         <td className="p-2.5 font-mono text-slate-600">2019/08 ~ 2023/11 (4.2年)</td>
                         <td className="p-2.5">
                           <span className="text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
-                            超过 240 床要求 · 达标
+                            超过 200 床要求 · 达标
                           </span>
                         </td>
                         <td className="p-2.5 text-center">
@@ -2808,7 +2808,7 @@ Date : [签署日期]`;
                     <span className="text-[10px] bg-amber-100 text-amber-900 px-1.5 py-0.2 rounded font-bold">法定合规</span>
                   </h5>
                   <p className="text-amber-900 text-xs leading-relaxed font-serif">
-                    “本人（张建国，拟任阿尔及利亚提济乌祖省240床综合医院项目常驻项目经理）郑重声明：若贵方招标委员会要求在授标评估前对本项目核心管理人员进行面对面技术考核与面试，本人保证将按招标人指定日期赴阿尔及尔或提济乌祖现场准时参加甲方面试，并完全承担相应陈述责任。”
+                    “本人（张建国，拟任阿尔及利亚 Phoenix 国际智慧医疗综合体项目常驻项目经理）郑重声明：若贵方招标委员会要求在授标评估前对本项目核心管理人员进行面对面技术考核与面试，本人保证将按招标人指定日期赴阿尔及尔或阿尔及尔北部现场准时参加甲方面试，并完全承担相应陈述责任。”
                   </p>
                   <div className="pt-1 flex items-center justify-between text-[11px] text-amber-800 font-mono">
                     <span>签署人：张建国 (已按手印及企业公章)</span>

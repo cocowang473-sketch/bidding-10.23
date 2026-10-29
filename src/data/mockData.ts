@@ -26,7 +26,7 @@ export const INITIAL_GLOBAL_PARAMS: GlobalPricingParams = {
   promptBeforeQuoting: true,
 };
 
-// 1. 安装费（定额含量）历史数据库 - 以 240 医院项目为基础
+// 1. 安装费（定额含量）历史数据库 - 以 Phoenix 智慧医疗综合体项目为基础
 export const MOCK_INSTALLATION_QUOTAS: InstallationQuotaComponent[] = [
   {
     id: 'QUOTA-001',
@@ -39,8 +39,8 @@ export const MOCK_INSTALLATION_QUOTAS: InstallationQuotaComponent[] = [
     auxiliaryCoeff: 1.1, // 测算系数 1.1
     machineryContent: 45,
     machineryCoeff: 1.1,
-    craftNotes: '含型钢底座制作、接地跨接、盘柜组立就位及端子校线，符合中建二局海外项目安装标准。',
-    referenceProject: '240 医院项目 (1年内已签单)',
+    craftNotes: '含型钢底座制作、接地跨接、盘柜组立就位及端子校线，符合宏远国际工程集团海外项目安装标准。',
+    referenceProject: 'Phoenix 智慧医疗综合体项目 (1年内已签单)',
   },
   {
     id: 'QUOTA-002',
@@ -54,7 +54,7 @@ export const MOCK_INSTALLATION_QUOTAS: InstallationQuotaComponent[] = [
     machineryContent: 30,
     machineryCoeff: 1.05,
     craftNotes: '含转弯卡固、相序标牌打印、防火封堵及铜鼻子液压压接。',
-    referenceProject: '240 医院项目 (1年内已签单)',
+    referenceProject: 'Phoenix 智慧医疗综合体项目 (1年内已签单)',
   },
   {
     id: 'QUOTA-003',
@@ -68,7 +68,7 @@ export const MOCK_INSTALLATION_QUOTAS: InstallationQuotaComponent[] = [
     machineryContent: 60,
     machineryCoeff: 1.1,
     craftNotes: '垂直及水平吊装支架、力矩螺栓扭矩检验、接地连接及红外测温孔位确认。',
-    referenceProject: '240 医院项目 (1年内已签单)',
+    referenceProject: 'Phoenix 智慧医疗综合体项目 (1年内已签单)',
   },
   {
     id: 'QUOTA-004',
@@ -82,7 +82,7 @@ export const MOCK_INSTALLATION_QUOTAS: InstallationQuotaComponent[] = [
     machineryContent: 25,
     machineryCoeff: 1.0,
     craftNotes: '吊架间距1.5米、跨接地线连接、螺栓朝外防止划伤线缆。',
-    referenceProject: '240 医院项目 (1年内已签单)',
+    referenceProject: 'Phoenix 智慧医疗综合体项目 (1年内已签单)',
   },
   {
     id: 'QUOTA-005',
@@ -96,7 +96,7 @@ export const MOCK_INSTALLATION_QUOTAS: InstallationQuotaComponent[] = [
     machineryContent: 20,
     machineryCoeff: 1.0,
     craftNotes: '含箱体找平、零地排汇流、分路标识及回路绝缘电阻摇测。',
-    referenceProject: '240 医院项目 (1年内已签单)',
+    referenceProject: 'Phoenix 智慧医疗综合体项目 (1年内已签单)',
   },
   {
     id: 'QUOTA-006',
@@ -110,7 +110,7 @@ export const MOCK_INSTALLATION_QUOTAS: InstallationQuotaComponent[] = [
     machineryContent: 35,
     machineryCoeff: 1.1,
     craftNotes: '放热焊接工艺、阻值测试（≤1Ω）、沥青防腐涂覆。',
-    referenceProject: '240 医院项目 (1年内已签单)',
+    referenceProject: 'Phoenix 智慧医疗综合体项目 (1年内已签单)',
   },
 ];
 
@@ -162,7 +162,7 @@ export const MOCK_MATERIALS: MaterialComponent[] = [
         notes: '欧洲原产 PrismaSeT P 柜型，免关税，直运阿尔及尔港',
       },
     ],
-    lastSignedProject: '240 医院项目',
+    lastSignedProject: 'Phoenix 智慧医疗综合体项目',
     lastSignedDate: '2026-03-15',
     isRecentOneYear: true,
     category: '电气设备',
@@ -202,7 +202,7 @@ export const MOCK_MATERIALS: MaterialComponent[] = [
         notes: '当地现货但产能有限，需视项目分批交货',
       },
     ],
-    lastSignedProject: '240 医院项目',
+    lastSignedProject: 'Phoenix 智慧医疗综合体项目',
     lastSignedDate: '2026-04-10',
     isRecentOneYear: true,
     category: '电缆母线',
@@ -241,7 +241,7 @@ export const MOCK_MATERIALS: MaterialComponent[] = [
         quotedDate: '2026-07-28',
       },
     ],
-    lastSignedProject: '240 医院项目',
+    lastSignedProject: 'Phoenix 智慧医疗综合体项目',
     lastSignedDate: '2026-02-18',
     isRecentOneYear: true,
     category: '电缆母线',
@@ -270,7 +270,7 @@ export const MOCK_MATERIALS: MaterialComponent[] = [
         quotedDate: '2026-08-14',
       },
     ],
-    lastSignedProject: '240 医院项目',
+    lastSignedProject: 'Phoenix 智慧医疗综合体项目',
     lastSignedDate: '2026-05-30',
     isRecentOneYear: true,
     category: '辅材管道',
@@ -309,7 +309,7 @@ export const MOCK_MATERIALS: MaterialComponent[] = [
         quotedDate: '2026-06-25',
       },
     ],
-    lastSignedProject: '240 医院项目',
+    lastSignedProject: 'Phoenix 智慧医疗综合体项目',
     lastSignedDate: '2026-04-22',
     isRecentOneYear: true,
     category: '电气设备',
@@ -349,14 +349,14 @@ export const MOCK_MATERIALS: MaterialComponent[] = [
         quotedDate: '2026-07-10',
       },
     ],
-    lastSignedProject: '240 医院项目',
+    lastSignedProject: 'Phoenix 智慧医疗综合体项目',
     lastSignedDate: '2026-01-19',
     isRecentOneYear: true,
     category: '电气设备',
   },
 ];
 
-// 3. 初始“240 医院项目 - 新 CFO 完整量单”工程量清单实战数据集
+// 3. 初始“Phoenix 智慧医疗综合体项目 - 新 CFO 完整量单”工程量清单实战数据集
 export const INITIAL_BOQ_ITEMS: BoqItem[] = [
   {
     id: 'BOQ-01',
@@ -574,7 +574,7 @@ export const INITIAL_BOQ_ITEMS: BoqItem[] = [
 export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
   {
     id: 'RFQ-2026-001',
-    inquiryNo: 'RFQ-CSCEC2-202608-01',
+    inquiryNo: 'RFQ-HYI-202608-01',
     materialName: '接地裸铜绞线 50mm² (Réseau de terre cuivre 50mm²)',
     materialSpec: '国标/IEC标准 裸铜 50mm² 导电率 ≥98%',
     quantityNeeded: 260,
@@ -586,7 +586,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
       supplierName: '宝胜电缆国际贸易分公司',
       quotedPrice: 155,
       currency: 'CNY',
-      replyAttachmentName: '宝胜报价单_240医院接地铜网_含材质证明.xlsx',
+      replyAttachmentName: '宝胜报价单_Phoenix项目接地铜网_含材质证明.xlsx',
       origin: '中国扬州',
       leadTime: '现货，海运周期35天',
       parsedAt: '2026-08-15 09:20',
@@ -598,7 +598,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
         supplierEmail: 'export.baosheng@cable-corp.cn',
         quotedPrice: 155,
         currency: 'CNY',
-        replyAttachmentName: '宝胜报价单_240医院接地铜网_含材质证明.xlsx',
+        replyAttachmentName: '宝胜报价单_Phoenix项目接地铜网_含材质证明.xlsx',
         origin: '中国扬州',
         leadTime: '现货，海运周期35天',
         parsedAt: '2026-08-15 09:20',
@@ -611,7 +611,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
         supplierEmail: 'overseas@feidong-cable.com',
         quotedPrice: 162,
         currency: 'CNY',
-        replyAttachmentName: 'FarEast_Cable_Quotation_Project240.pdf',
+        replyAttachmentName: 'FarEast_Cable_Quotation_PhoenixProj.pdf',
         origin: '中国宜兴',
         leadTime: '库存现货，海运32天',
         parsedAt: '2026-08-15 11:40',
@@ -647,7 +647,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
   },
   {
     id: 'RFQ-2026-002',
-    inquiryNo: 'RFQ-CSCEC2-202608-02',
+    inquiryNo: 'RFQ-HYI-202608-02',
     materialName: '柴油发电机组 1200kVA 静音集装箱型 (Groupe électrogène 1200kVA)',
     materialSpec: '康明斯发动机 + 斯坦福发电机, 50Hz 400V, 带ATS并网接口',
     quantityNeeded: 2,
@@ -659,7 +659,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
       supplierName: 'SDMO Kohler France (科勒发电机)',
       quotedPrice: 92000,
       currency: 'EUR',
-      replyAttachmentName: 'Devis_SDMO_1200kVA_Algerie_Projet240.pdf',
+      replyAttachmentName: 'Devis_SDMO_1200kVA_PhoenixProj.pdf',
       origin: '法国布雷斯特 (免关税直发)',
       leadTime: '出厂6周，海运10天',
       parsedAt: '2026-08-12 16:45',
@@ -671,7 +671,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
         supplierEmail: 'export.sdmo@kohler-power.fr',
         quotedPrice: 92000,
         currency: 'EUR',
-        replyAttachmentName: 'Devis_SDMO_1200kVA_Algerie_Projet240.pdf',
+        replyAttachmentName: 'Devis_SDMO_1200kVA_PhoenixProj.pdf',
         origin: '法国布雷斯特 (免关税直发)',
         leadTime: '出厂6周，海运10天',
         parsedAt: '2026-08-12 16:45',
@@ -708,7 +708,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
   },
   {
     id: 'RFQ-2026-003',
-    inquiryNo: 'RFQ-CSCEC2-202608-03',
+    inquiryNo: 'RFQ-HYI-202608-03',
     materialName: '防爆型照明配电箱 (Coffret d’éclairage antidéflagrant)',
     materialSpec: 'Ex d IIB T4 Gb, 32A, 12路',
     quantityNeeded: 6,
@@ -745,7 +745,7 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
         supplierEmail: 'export@feice.com',
         quotedPrice: 4500,
         currency: 'CNY',
-        replyAttachmentName: 'Feice_Quotation_240Hosp.pdf',
+        replyAttachmentName: 'Feice_Quotation_PhoenixMed.pdf',
         origin: '中国上海',
         leadTime: '现货部分库存，20天发货',
         parsedAt: '2026-08-16 11:00',
@@ -773,8 +773,8 @@ export const MOCK_RFQ_RECORDS: RfqInquiryRecord[] = [
 export const MOCK_HISTORICAL_CONTRACTS: HistoricalContractRecord[] = [
   {
     id: 'HC-2026-001',
-    contractNo: 'HT-CSCEC-ALG-2026-018',
-    projectName: '阿尔及利亚 240 床综合医院一期',
+    contractNo: 'HT-HYI-INTL-2026-018',
+    projectName: '阿尔及利亚 Phoenix 智慧医疗综合体一期',
     materialName: '双电源转换配电柜 ATS 800A',
     materialSpec: '800A 4P PC级 带自启动接点',
     category: '电气设备',
@@ -791,7 +791,7 @@ export const MOCK_HISTORICAL_CONTRACTS: HistoricalContractRecord[] = [
   },
   {
     id: 'HC-2026-002',
-    contractNo: 'HT-CSCEC-ALG-2025-092',
+    contractNo: 'HT-HYI-INTL-2025-092',
     projectName: '阿尔及尔嘉玛大清真寺项目 (Djamaa el Djazaïr)',
     materialName: '密集型铜母线槽 1600A',
     materialSpec: '1600A 4P+PE IP66 铜导体',
@@ -809,7 +809,7 @@ export const MOCK_HISTORICAL_CONTRACTS: HistoricalContractRecord[] = [
   },
   {
     id: 'HC-2026-003',
-    contractNo: 'HT-CSCEC-ALG-2025-075',
+    contractNo: 'HT-HYI-INTL-2025-075',
     projectName: '奥兰奥林匹克综合体育场机电标段',
     materialName: '耐火动力电缆 U-1000 R2V 4x185mm²',
     materialSpec: 'U-1000 R2V 4x185mm² 铜芯阻燃耐火',
@@ -827,7 +827,7 @@ export const MOCK_HISTORICAL_CONTRACTS: HistoricalContractRecord[] = [
   },
   {
     id: 'HC-2026-004',
-    contractNo: 'HT-CSCEC-ALG-2025-043',
+    contractNo: 'HT-HYI-INTL-2025-043',
     projectName: '康斯坦丁大学城 15000 住宿生项目',
     materialName: '热浸镀锌电缆梯架 300x50mm',
     materialSpec: '300x50x1.5mm 热镀锌 附联接片螺栓',
@@ -845,8 +845,8 @@ export const MOCK_HISTORICAL_CONTRACTS: HistoricalContractRecord[] = [
   },
   {
     id: 'HC-2026-005',
-    contractNo: 'HT-CSCEC-ALG-2026-005',
-    projectName: '阿尔及利亚 240 床综合医院标段',
+    contractNo: 'HT-HYI-INTL-2026-005',
+    projectName: '阿尔及利亚 Phoenix 智慧医疗综合体标段',
     materialName: '楼层医用负荷动力配电箱 63A',
     materialSpec: '63A 380V/220V 16回出线 IP55',
     category: '电气设备',
@@ -863,7 +863,7 @@ export const MOCK_HISTORICAL_CONTRACTS: HistoricalContractRecord[] = [
   },
   {
     id: 'HC-2024-021',
-    contractNo: 'HT-CSCEC-ALG-2024-033',
+    contractNo: 'HT-HYI-INTL-2024-033',
     projectName: '布米尔达斯大学城二期机电工程',
     materialName: '低压进线总配电柜 TGBT 2500A',
     materialSpec: '2500A 4P 50kA IP54 施耐德元器件',
@@ -916,7 +916,7 @@ export const MOCK_CHANGE_HISTORY: ChangeHistoryRecord[] = [
     actionType: 'pricing',
     title: '执行 AI 语义双库智能匹配与全量重算',
     description: '触发定额库与材料库双库匹配，成功命中 8/9 项工程子目，双库匹配覆盖率达 89%，完成关税运费与综合管理费实时测算。',
-    target: '阿尔及利亚 240 床综合医院标段强电清单',
+    target: '阿尔及利亚 Phoenix 智慧医疗综合体标段强电清单',
     operator: '李工 (造价工程师)',
     timestamp: '2026-08-16 11:12:08',
     timeAgo: '3小时前',
@@ -943,7 +943,7 @@ export const MOCK_CHANGE_HISTORY: ChangeHistoryRecord[] = [
     id: 'HIST-2026-0815-005',
     actionType: 'import',
     title: '导入阿尔及利亚近年已签单台账 6 条',
-    description: '从集团海外工程台账系统批量导入 240 医院一期、大清真寺、奥兰体育场等真实中标签单，建立采信依据。',
+    description: '从集团海外工程台账系统批量导入 Phoenix 智慧医疗综合体一期、大清真寺、奥兰体育场等真实中标签单，建立采信依据。',
     target: '历史签单数据库 (Historical Contract Ledger)',
     operator: '张工 (商务造价主管)',
     timestamp: '2026-08-15 16:20:00',

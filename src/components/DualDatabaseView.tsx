@@ -163,7 +163,7 @@ export const DualDatabaseView: React.FC<DualDatabaseViewProps> = ({
           quotedDate: '2026-08-15',
         },
       ],
-      lastSignedProject: '240 医院项目 (1年内已签单)',
+      lastSignedProject: 'Phoenix 智慧医疗综合体项目 (1年内已签单)',
       lastSignedDate: '2026-08-01',
       isRecentOneYear: true,
       category: newMatCategory,
@@ -191,7 +191,7 @@ export const DualDatabaseView: React.FC<DualDatabaseViewProps> = ({
       machineryContent: 40,
       machineryCoeff: 1.1,
       craftNotes: '现场标准施工工艺，已按北非工程规范校核',
-      referenceProject: '阿尔及利亚 240 医院项目',
+      referenceProject: '阿尔及利亚 Phoenix 智慧医疗综合体项目',
     };
 
     onAddQuota(newQuota);
@@ -240,7 +240,7 @@ export const DualDatabaseView: React.FC<DualDatabaseViewProps> = ({
             <div className="p-3.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
               <span className="text-slate-500 block">重点覆盖工程</span>
               <div className="font-bold text-slate-900 truncate mt-1">
-                240 医院 · 嘉玛大清真寺 · 奥兰体育场
+                Phoenix 智慧医疗综合体 · 嘉玛大清真寺 · 奥兰体育场
               </div>
               <span className="text-[10px] text-slate-400 mt-0.5 block">
                 真实海外履约合规单价

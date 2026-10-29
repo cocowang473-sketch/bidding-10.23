@@ -25,7 +25,7 @@ export interface MaterialComponent {
   basePrice: number; // 当前采纳单价 (原币)
   imageUrl: string; // 材料配图字段，提供设备外观与技术构造图鉴
   supplierQuotes: SupplierQuote[];
-  lastSignedProject: string; // 如 "240 医院项目"
+  lastSignedProject: string; // 如 "Phoenix 智慧医疗综合体项目"
   lastSignedDate: string; // 签单时间 (判断是否1年内)
   isRecentOneYear: boolean;
   category: '电气设备' | '电缆母线' | '辅材管道' | '暖通消防' | '智能化弱电';
@@ -45,7 +45,7 @@ export interface InstallationQuotaComponent {
   machineryContent: number; // 机械含量基数
   machineryCoeff: number; // 机械测算系数 (如 1.1)
   craftNotes: string; // 工艺工法说明
-  referenceProject: string; // "240 医院项目"
+  referenceProject: string; // "Phoenix 智慧医疗综合体项目"
   createdAt?: string;
   updatedAt?: string;
 }

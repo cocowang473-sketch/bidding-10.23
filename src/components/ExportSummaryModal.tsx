@@ -60,7 +60,7 @@ export const ExportSummaryModal: React.FC<ExportSummaryModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', '中建二局_完整投标文件条款.txt');
+    link.setAttribute('download', '宏远国际_完整投标文件条款.txt');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -151,7 +151,7 @@ export const ExportSummaryModal: React.FC<ExportSummaryModalProps> = ({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', '中建二局_240医院_CFO量单报价汇总表.csv');
+    link.setAttribute('download', '宏远国际_Phoenix智慧医疗综合体_CFO量单报价汇总表.csv');
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -164,7 +164,7 @@ export const ExportSummaryModal: React.FC<ExportSummaryModalProps> = ({
           <div className="flex items-center gap-2">
             <Layers className="w-4 h-4 text-blue-700" />
             <h3 className="text-sm font-bold text-slate-900">
-              投标文件综合成果导出 (阿尔及利亚 240 医院项目)
+              投标文件综合成果导出 (阿尔及利亚 Phoenix 智慧医疗综合体项目)
             </h3>
           </div>
           <button

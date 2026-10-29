@@ -106,7 +106,7 @@ export const BilingualProposalExportModal: React.FC<BilingualProposalExportModal
     const a = document.createElement('a');
     a.href = url;
     const langSuffix = selectedLang === 'zh' ? '中文版' : selectedLang === 'fr' ? 'Version-Francaise' : '中法双语对照版';
-    a.download = `投标商务与法定文件-${langSuffix}-240床医院.txt`;
+    a.download = `投标商务与法定文件-${langSuffix}-Phoenix项目规模医院.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };

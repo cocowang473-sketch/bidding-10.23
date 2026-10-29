@@ -501,7 +501,7 @@ export const SendEmailRfqModal: React.FC<SendEmailRfqModalProps> = ({
       const supObj = suppliersList.find((s) => s.name === sName);
       const conf = perSupplierConfigs[sName] || {
         templateId: supObj ? getRecommendedTemplateId(supObj.country) : 'domestic_export',
-        subject: `[正式商务询价] 中建二局海外 240 医院项目关于【${materialName}】设备采购报价邀请函 (致 ${sName})`,
+        subject: `[正式商务询价] 宏远国际工程集团海外 Phoenix 智慧医疗综合体项目关于【${materialName}】设备采购报价邀请函 (致 ${sName})`,
         body: '',
         isCustomEdited: false,
       };
@@ -579,7 +579,7 @@ export const SendEmailRfqModal: React.FC<SendEmailRfqModalProps> = ({
       setIsSending(false);
       const newRecord: RfqInquiryRecord = {
         id: `RFQ-${Date.now().toString().slice(-4)}`,
-        inquiryNo: `RFQ-CSCEC2-${Date.now().toString().slice(-4)}`,
+        inquiryNo: `RFQ-HYI-${Date.now().toString().slice(-4)}`,
         materialName,
         materialSpec,
         quantityNeeded: quantity,
@@ -591,7 +591,7 @@ export const SendEmailRfqModal: React.FC<SendEmailRfqModalProps> = ({
           const s = suppliersList.find((item) => item.name === name);
           return s ? s.email : name;
         }),
-        emailSubject: `[正式商务询价/Demande de Cotation] 中建二局海外 240 医院项目关于【${materialName}】设备采购报价邀请函`,
+        emailSubject: `[正式商务询价/Demande de Cotation] 宏远国际工程集团海外 Phoenix 智慧医疗综合体项目关于【${materialName}】设备采购报价邀请函`,
         emailBody: builtPerSupplierEmails[selectedSuppliers[0]]?.body || '',
         perSupplierEmails: builtPerSupplierEmails,
         imageUrl,
@@ -706,7 +706,7 @@ export const SendEmailRfqModal: React.FC<SendEmailRfqModalProps> = ({
                     : '询价函发送成功 · 供应商报价比对与回函工作台'}
                 </h3>
                 <span className="text-[11px] px-2 py-0.5 rounded-full font-medium bg-blue-100 text-blue-800">
-                  阿尔及利亚 240 医院项目 (Projet 240 Lits)
+                  阿尔及利亚 Phoenix 智慧医疗综合体项目 (Projet Phoenix)
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 mt-0.5">
@@ -1090,7 +1090,7 @@ export const SendEmailRfqModal: React.FC<SendEmailRfqModalProps> = ({
                     <div>
                       <span className="text-slate-500 block mb-0.5">发件方 (项目官方采购邮箱)：</span>
                       <span className="font-mono text-slate-800 bg-white px-2 py-1 rounded border border-slate-200 block truncate">
-                        procurement.dz@cscec2.com.cn (中国建筑第二工程局有限公司 海外工程采购中心)
+                        procurement.dz@cscec2.com.cn (宏远国际工程集团有限公司 海外工程采购中心)
                       </span>
                     </div>
 
@@ -1269,7 +1269,7 @@ export const SendEmailRfqModal: React.FC<SendEmailRfqModalProps> = ({
                   </div>
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="bg-white px-2 py-0.5 rounded border border-slate-200 text-[10px]">
-                      📎 240医院强电技术规格要求_Spécifications.pdf
+                      📎 Phoenix智慧医疗综合体强电技术规格要求_Spécifications.pdf
                     </span>
                     <span className="bg-white px-2 py-0.5 rounded border border-slate-200 text-[10px]">
                       📎 物资技术构造与实物图样_Drawings.jpg
